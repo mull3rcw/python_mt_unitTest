@@ -1,0 +1,129 @@
+PyUSB-0.3.1
+===========
+
+PyUSB is a Python module that provides easy USB access from Python language.
+
+I'm using the Slackware distribution for the development and tests.
+
+PyUSB isn't complete yet, but just does provide core functions for
+you develop applications using it.
+You can get documentation using doc strings, use pydoc to generate a
+documentation.
+
+To compile PyUSB, you need the libusb, available at 
+http://libusb.sourceforge.net
+
+To install PyUSB, type this:
+
+python setup.py install
+
+(You need root access on the system).
+This command will build and install PyUSB.
+
+If you have any question about PyUSB, you can contact me at
+wander.lairson@gmail.com
+
+Compiling on Windows
+====================
+
+Some people has reported problems trying compiling on it. So, here you can 
+find some instructions to compile successfully on the Windows.
+
+To run PyUSB on Windows, you need get installed libusb-win32, you can find
+libusb for win32 at http://libusb-win32.sourceforge.net.
+
+To compile on cygwin, copy the libusb.a file from libusb-win32 lib directory
+to $(CYGWINDIR)/usr/lib, and copy the file usb.h from libusb-win32 include
+directory to $(CYGWINDIR)/usr/include. After this, run the command:
+
+python setup.py install
+
+To compile on Visual C++, you can use distutils (be attempt, perhaps you need
+install some tools to get build, testing on a machine in my job, the
+distutils system asked me to install .NET SDK Framework (I had compiled python
+with Visual C++ 6.0)), or you can use the Visual C++ .NET 2003 project solution
+included with the package, you need the python and libusb-win32 headers and
+libs in the Visual C++ paths (or change project settings manually).
+
+USING
+=====
+
+You can get a detailed documentation if the PyUSB using pydoc,
+simply type:
+pydoc usb
+and will be generated the PyUSB module documentation...
+
+Here is a short introduction to PyUSB:
+
+import usb	# import usb module
+
+bus = usb.busses()	# get available busses
+
+for b in bus:		# list of the busses
+	pass
+
+for dev in bus[0].devices:		# list of the bus
+	pass
+
+device = bus[0].devices[0]
+
+for c in device.configurations:	# list of the device configurations
+	pass
+
+handle = device.open()	# open the device
+
+conf = device.configurations[0]
+
+for i in conf.interfaces:	# available interfaces
+	pass
+
+intf = conf.interfaces[0]
+
+for alt in intf:			# available alternate settings
+	pass
+
+altset = intf[0]
+
+handle.setConfiguration(0)
+handle.claimInterface(0)
+
+#
+# use it
+#
+
+handle.releaseInterface()	# called automatically on __del__
+del handle
+
+#
+# to see pyusb docstrings...
+#
+from pydoc import help
+import usb
+help(usb)
+
+TODO/ROADMAP
+============
+
+- More tests
+- More samples
+- Better documentation
+- Facility functions to find devices
+
+THANKS
+======
+
+To manage better "THANKS" list, I decided only include the person names,
+not describing their contributions. Ever is possible, I refer contributions in
+the source code. If I forgot your name, excuse me. Please, please, please,
+email me, so I'll be able to include your name here.
+
+- Damian Staniforth
+- Brenno Diegoli
+- Israel Florentino
+- Xiaofan Chen
+- Mario Olimpio de Menezes
+- Ray Schumacher
+- Mark Rages
+- James Barabas
+
+(If I wrote your name wrong, sorry. Please, email me)
