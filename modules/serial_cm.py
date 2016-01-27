@@ -71,11 +71,10 @@ def get_ser():
 filename = path+log_name+str(myst)+'.log'
 log = set_log_info(path, 'check_card')
 
-
-	
 ########################
 #Initialize Access
-def ser_Init(my_path, my_name):
+
+def _ser_init():
 
 	wait4ser=True
 		
@@ -97,8 +96,12 @@ def ser_Init(my_path, my_name):
 		log.info(get_ser().name + ' is open...')
 	else:
 		print 'Another UART blocking %s' % (get_ser().name)
-		log.info('Another UART blocking '+get_ser().name)
-	
+		log.info('Another UART blocking '+get_ser().name)	
+
+
+
+def ser_Init(my_path, my_name):
+	_ser_init()
 	if become_root() == True:
 		print "Logged in OK: sci_basic detected"
 	else:
@@ -106,6 +109,21 @@ def ser_Init(my_path, my_name):
 		
 	return set_log_info(my_path, my_name)	
 
+	
+def uart_self_test():
+	input = 'ls'
+	get_ser().write(input.encode('ascii')+'\n')
+	time.sleep(1)
+	out = str(get_ser().readlines())
+#	print out
+	if out is None:
+		return True
+	elif out == "[]":
+		return True
+	else:
+		return False
+	
+	
 def await_boot_complete():
 
 	input = 'ls'
