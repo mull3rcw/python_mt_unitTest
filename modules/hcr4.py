@@ -5,7 +5,7 @@ import time, datetime
 import Tkinter
 
 from serial_cm import ser_Init, get_ser, log
-from smart_card import isCardPresent, getEnvData
+from smart_card import isCardPresent, getEnvData, setCardFacilitator
 from solenoid import card_bay_locked, card_bay_open, card_bay_init, power_off
 
 #Time delay when possible reboot detected.
@@ -30,6 +30,7 @@ if __name__=='__main__':
 		log = ser_Init(my_path, my_name)
 		#log = set_log_info(my_path, my_name)
 		card_bay_init()
+		setCardFacilitator()
 
 		while run:
 			for i in range(0,2):

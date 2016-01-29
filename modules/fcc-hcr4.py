@@ -10,6 +10,7 @@ import os
 from serial_cm import ser_Init, get_ser, log, set_log_info, uart_self_test
 from smart_card import isCardPresent, getEnvData
 from ping import find_ip_addr, can_addr_ping
+from sec_mon_hcr4 import read_tamper_count
 
 
 
@@ -30,6 +31,7 @@ if __name__=='__main__':
 		uart_count 		= 0
 		usb_count 		= 0
 		smart_card_count 	= 0
+		tamper_count 	= 0
 		total_count 	= 0
 ################################		
 	
@@ -142,6 +144,14 @@ if __name__=='__main__':
 			log.info( "SmartCard Count = \t%d of %d", smart_card_count, total_count)
 			print 'SmartCard Count = \t\t%d of %d' % (smart_card_count, total_count)	
 			#SMARTCARD Test end:#######################################################
+			
+			#TAMPER:####################################################################
+			ret = read_tamper_count()
+			if ret == 0: #0 errors
+				tamper_count += 1
+			log.info( "TAMPER Count = \t\t\t%d of %d", tamper_count, total_count)
+			print 'TAMPER Count = \t\t\t%d of %d' % (tamper_count, total_count)
+			#TAMPER end:################################################################
 			
 			log.info("\n")
 			print '\n'

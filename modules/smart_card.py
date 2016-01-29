@@ -5,7 +5,8 @@ from serial_cm import get_ser
 def getEnvData (num):
 	#load num into sc* cmd line
 	ser = get_ser()
-	input = './sci_basic /dev/sc 10'
+	input = '/opt/maxim-ic/basic/examples/sci_basic /dev/sc 10'
+	#input = './sci_basic /dev/sc 10'
 	index = input.find(' 10')
 	input2 = input[:index] + str(num) + input[index:]
 	ser.write(input2.encode('ascii')+'\n')
@@ -41,4 +42,18 @@ def isCardPresent (num):
 		return -1
 
 
-
+def setCardFacilitator ():
+	#This statys running until completes
+	ser = get_ser()
+	input = '/opt/maxim-ic/basic/examples/card_facilitator'
+	ser.write(input.encode('ascii')+'\n')
+	#Wait 2 seconds for Sam card
+	print "Pull out MSR read within 10 seconds"
+	out = str(ser.readlines())
+	print out
+	time.sleep(10)
+	#Control-C
+	input = '\x03'
+	ser.write(input.encode('ascii')) #+'\n')
+	print "DONE"
+	

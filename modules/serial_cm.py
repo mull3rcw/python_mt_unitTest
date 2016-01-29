@@ -153,6 +153,7 @@ def await_boot_complete():
 		print ("Awaiting Bootup")
 		input = 'cd /root'
 		get_ser().write(input.encode('ascii')+'\n')
+		time.sleep(2)
 		log.info("Awaiting Bootup")
 		print out
 		return "Pending"
