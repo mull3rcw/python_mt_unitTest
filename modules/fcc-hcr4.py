@@ -10,7 +10,7 @@ import os
 from serial_cm import ser_Init, get_ser, log, set_log_info, uart_self_test
 from smart_card import isCardPresent, getEnvData
 from ping import find_ip_addr, can_addr_ping
-from sec_mon_hcr4 import read_tamper_count
+from sec_mon_hcr4 import read_tamper_count, read_rtc_count
 
 
 
@@ -37,7 +37,7 @@ if __name__=='__main__':
 	
 ##############USER DEFINED##############			
 ##Overwrite Log location	
-		my_path = 'C:\MagTek\HCR-4\\fcc_log\\'
+		my_path = '..\\fcc_log\\'
 		my_name = 'fcc_test'
 ##############USER DEFINED##############				
 
@@ -147,10 +147,21 @@ if __name__=='__main__':
 			
 			#TAMPER:####################################################################
 			ret = read_tamper_count()
-			if ret == 0: #0 errors
+			if ret < 0: #Read Failure
+				log.info("TAMPER Read Failed")
+				print "TAMPER Read Failed"
+			elif ret > 0:
+				log.info("TAMPER Found")
+				print "TAMPER Found"
+			else:	
 				tamper_count += 1
-			log.info( "TAMPER Count = \t\t\t%d of %d", tamper_count, total_count)
+			log.info( "TAMPER Count = \t\t%d of %d", tamper_count, total_count)
 			print 'TAMPER Count = \t\t\t%d of %d' % (tamper_count, total_count)
+			
+			#RTC
+			log.info( "last RTC Event = \t\t%d", read_rtc_count())
+			print 'last RTC Event = \t\t%d' % (read_rtc_count())
+			
 			#TAMPER end:################################################################
 			
 			log.info("\n")

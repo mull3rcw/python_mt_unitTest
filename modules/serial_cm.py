@@ -3,9 +3,8 @@ import serial, time, datetime, logging, os
 
 ##################################################
 #USER/Machine SPECIFIC, change UART to MATCH YOURS!!!!
-
 port = 'COM1'
-path = 'C:\MagTek\HCR-4\log\\'
+path = '..\log\\'
 brk = '\\'
 log_name = 'check_card_log'
 
