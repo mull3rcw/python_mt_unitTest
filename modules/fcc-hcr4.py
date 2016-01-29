@@ -99,8 +99,8 @@ if __name__=='__main__':
 			#SMARTCARD Test:##########################################################
 			#Per Smart Card(2)
 			#2 card, clear flag each time
-			c_present = 0
-			for i in range(0,2):
+			c_present = 1		#changed 1,2 from 0,2 and c_present as 1, ignoring SAM card.
+			for i in range(1,2):
 				x = isCardPresent(i)
 				time.sleep(1)
 				if(x < 0):
