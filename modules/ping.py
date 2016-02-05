@@ -17,11 +17,13 @@ def find_ip_addr (node):
 		return -1
 
 def can_addr_ping(addr):		
+        #print addr
 	response = os.system('ping -n 1 %s > temp.txt' % addr)
+	time.sleep(1)
 	ret = False
 	if response != 0:
-		log.info("Ping Failed")
-		print 'Ping Failed'
+		log.info("Ping to %s Failed" % (addr))
+		print 'Ping to %s Failed' % addr
 		return ret
 	txt = open("temp.txt")
 	out = txt.readlines()

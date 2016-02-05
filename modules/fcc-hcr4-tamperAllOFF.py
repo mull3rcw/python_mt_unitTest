@@ -40,7 +40,7 @@ if __name__=='__main__':
 	##Overwrite Log location	
 		my_path = '..\\fcc_log\\'
 		my_name = 'fcc_test'
-		tamper_flag = '0' 	# 0-OFF, f-tamper 0,1,2,3 active, 3f-All Tampers Active and triggered
+		tamper_flag = '0' 	# 0-OFF, f-tamper 0,1,2,3 active, 3f-All Tampers and Latches (not this test) Active and triggered
 							# 1 - Tamper1 armed
 							# 2 - Tamper2 armed
 							# 3 - Tampers 1&2 armed
@@ -171,15 +171,16 @@ if __name__=='__main__':
 			#RTC
 			rtc_stamp = read_rtc_count()
 			if rtc_stamp < 0:
-				log.info("\t\t\tPossible reset RTC")
-				print '\t\t\tPossible reset RTC'
-			else:
-				log.info( "last RTC Event = \t\t%d", rtc_stamp)
-				print 'last RTC Event = \t\t%d' % (rtc_stamp)
+                                log.info("\t\t\tPossible reset RTC")
+                                print '\t\t\tPossible reset RTC'
+                        else:
+                                log.info( "last RTC Event = \t\t%d", rtc_stamp)
+                                print 'last RTC Event = \t\t%d' % (rtc_stamp)
 			if rtc_stamp > 0:
 				check_secdiag()
 			
 			#TAMPER end:################################################################
+			
 			log.info("\n")
 			print '\n'
 			

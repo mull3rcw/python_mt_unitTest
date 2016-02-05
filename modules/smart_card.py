@@ -25,7 +25,7 @@ def getEnvData (num):
 def isCardPresent (num):
 	# check list for NOK or OK
 	ser = get_ser()
-	input = './sci_basic /dev/sc 3'
+	input = '/opt/maxim-ic/basic/examples/sci_basic /dev/sc 3'
 	index = input.find(' 3')
 	input2 = input[:index] + str(num) + input[index:]
 	#print input2
