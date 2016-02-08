@@ -30,7 +30,7 @@ if __name__=='__main__':
 		log = ser_Init(my_path, my_name)
 		#log = set_log_info(my_path, my_name)
 		card_bay_init()
-		setCardFacilitator()
+		
 
 		while run:
 			for i in range(0,2):

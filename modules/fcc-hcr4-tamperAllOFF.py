@@ -62,7 +62,6 @@ if __name__=='__main__':
 		while run:
 			#Total Test Cycles
 			#log.info( "\n")
-			#print( "\n")
 			total_count+=1
 			log.debug( "Total Test Cycles = %d", total_count)
 			
@@ -74,7 +73,6 @@ if __name__=='__main__':
 					ethernet_count+=1
 					
 			log.info( "Ethernet Count = \t\t%d of %d", ethernet_count, total_count)
-			print 'Ethernet Count = \t\t%d of %d' % (ethernet_count, total_count)
 			#Ethernet Test end:#######################################################
 			
 			#UART:####################################################################
@@ -82,29 +80,28 @@ if __name__=='__main__':
 			if ret == False:
 				uart_count += 1
 			log.info( "UART Count = \t\t\t%d of %d", uart_count, total_count)
-			print 'UART Count = \t\t\t%d of %d' % (uart_count, total_count)
 			#UART end:################################################################
 
 			#USB:####################################################################
 			dev = usb.core.find(idVendor=0x0525, idProduct=0xA4AC) #HCR-4 	
 			if dev is None:
 				#raise ValueError('Device not found')
-				print('USB Device not found')
+				log.error('\t\t\tUSB Device not found')
 			elif dev is 'NoneType':
-				print('USB Device noneType found')
+				log.error('\t\t\tUSB Device noneType found')
 			elif prev_dev == "Not Init":
 				#First time is free
 				usb_count += 1
 				prev_dev = dev
 			else:	
-				#print "PREV VENDOR %s" % prev_dev.idVendor
-				#print "DEV VENDOR %s" % dev.idVendor
+				log.debug( "PREV VENDOR %s" % prev_dev.idVendor)
+				log.debug("DEV VENDOR %s" % dev.idVendor)
 				if prev_dev.idVendor == dev.idVendor and prev_dev.idProduct == dev.idProduct:
 					usb_count += 1
 				prev_dev = dev	
 
 			log.info( "USB Count = \t\t\t%d of %d", usb_count, total_count)
-			print 'USB Count = \t\t\t%d of %d' % (usb_count, total_count)
+
 			#USB end:################################################################
 
 			#SMARTCARD Test:##########################################################
@@ -116,17 +113,15 @@ if __name__=='__main__':
 				time.sleep(1)
 				if(x < 0):
 					count+=1
-					print "\t\t\tFailed %d for Card %d" % (count,i)
+					log.debug("\t\t\tFailed %d for Card %d", count, i)
 					#if 5 failed reads in a row, the system may have reset.
 					if count > 5:
-                                                print "\t\t\tReading stopped, Reboot suspected"
-						log.error("\t\t\tReading stopped, Reboot suspected")
+						log.error("\t\t\tReading stopped, Reboot restarting script.\n\n\n")
 						get_ser().close()
 						run = 0
 						break
 				elif x == 0:
-					print "card %d is Missing" % (x)
-					log.error("card %d is Missing" % (x))
+					log.error("\t\t\tcard %d is Missing" % (i))
 				elif x == 1:
 					#Get ATR
 					count = 0
@@ -137,7 +132,6 @@ if __name__=='__main__':
 						if isCardP[i] == True:
 							emv_data = getEnvData(i)
 							log.debug("Card %d ATR %s" % (i, emv_data))
-							#print("Card %d ATR %s" % (i, emv_data))
 							if "No EMV Support" not in str(emv_data):
 								characters = emv_data.replace(' ', '')
 								log.debug("Card %d ATR string %s" % (i, characters.decode('hex')))
@@ -147,41 +141,32 @@ if __name__=='__main__':
 								if c_present == 2:
 									smart_card_count += 1
 						else:
-							log.info( "%s Card %d Removed" % (st, i))
-							print( "%s Card %d Removed" % (st, i))
+							log.warn( "%s Card %d Removed" % (st, i))
 				else:
-					print "x is %d UNKNOWN" % (x)
-			log.info( "SmartCard Count = \t%d of %d", smart_card_count, total_count)
-			print 'SmartCard Count = \t\t%d of %d' % (smart_card_count, total_count)	
+					log.error("x is %d UNKNOWN") % (x)
+			log.info( "SmartCard Count = \t\t%d of %d", smart_card_count, total_count)
 			#SMARTCARD Test end:#######################################################
 			
 			#TAMPER:####################################################################
 			ret = read_tamper_count()
 			if ret < 0: #Read Failure
-				log.info("TAMPER Read Failed")
-				print "TAMPER Read Failed"
+				log.error("\t\t\tTAMPER Read Failed")
 			elif ret > 0:
-				log.info("TAMPER Found")
-				print "TAMPER Found"
+				log.warn("TAMPER Found")
 			else:	
 				tamper_count += 1
 			log.info( "TAMPER Count = \t\t%d of %d", tamper_count, total_count)
-			print 'TAMPER Count = \t\t\t%d of %d' % (tamper_count, total_count)
 			
 			#RTC
 			rtc_stamp = read_rtc_count()
 			if rtc_stamp < 0:
-                                log.info("\t\t\tPossible reset RTC")
-                                print '\t\t\tPossible reset RTC'
+				log.error("\t\t\tPossible reset RTC")
                         else:
                                 log.info( "last RTC Event = \t\t%d", rtc_stamp)
-                                print 'last RTC Event = \t\t%d' % (rtc_stamp)
 			if rtc_stamp > 0:
 				check_secdiag()
 			
 			#TAMPER end:################################################################
-			
-			log.info("\n")
-			print '\n'
+			log.info("\t\t\t==============================\n")
 			
 			

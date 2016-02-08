@@ -23,12 +23,11 @@ def can_addr_ping(addr):
 	ret = False
 	if response != 0:
 		log.info("Ping to %s Failed" % (addr))
-		print 'Ping to %s Failed' % addr
 		return ret
 	txt = open("temp.txt")
 	out = txt.readlines()
 	if "Destination host unreachable" in str(out):
-		print 'Ping Dest Unreachable'
+		log.warn("Ping Dest Unreachable")
 		return ret
 	elif "Lost = 0" not in str(out):
 		print 'Ping Lost'
@@ -53,7 +52,7 @@ if __name__=='__main__':
 		
 		while run:
 			#Total Test Cycles
-			print( "\n")
+			log.info("\n")
 			total_count+=1
 		
 			#Ethernet Test:###########################################################
@@ -68,6 +67,5 @@ if __name__=='__main__':
 					ethernet_count+=1
 					
 			log.info( "Ethernet Count = \t\t%d of %d", ethernet_count, total_count)
-			print 'Ethernet Count = \t\t%d of %d' % (ethernet_count, total_count)
 			#Ethernet Test end:#######################################################
 			

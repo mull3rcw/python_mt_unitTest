@@ -2,35 +2,43 @@
 import time, datetime
 from serial_cm import ser_Init, get_ser, log, _ser_init
 
+secmon_dev_name = 0
+
+def set_secmon_devnm(new):
+	global secmon_dev_name
+	secmon_dev_name = new
+
+def get_secmon_devnm():
+	global secmon_dev_name
+	return secmon_dev_name 
+
+
 
 def get_bit(byteval,idx):
-#	print "byteval %x" % (byteval)
+#	log.info( "byteval %x" % (byteval))
 	return ((byteval&(1<<idx))!=0);
 
-def read_tamper_count():
-	input = '/opt/maxim-ic/basic/examples/secmon /dev/secmon 3'
-        if (get_ser().isOpen()==False):
-                print "serial not available"
-                return -1
+def read_tamper_count_old():
+	input = '/opt/maxim-ic/basic/examples/secmon /dev/secmon0 3'
+	if (get_ser().isOpen()==False):
+		log.error("serial not available")
+		return -1
 
 	get_ser().write(input.encode('ascii')+'\n')
 	time.sleep(1)
 	out = get_ser().readlines()
 	count = -1
-#	print out
-#	print out[10]
+	print out
 	if not out:
-                print "\t\t\tPossible reset"
-                log.info( "\t\t\tPossible Reset")
-        elif len(out) < 10:
-                print "\t\t\tPossible reset too short"
-                log.info( "\t\t\tPossible reset too short")
-        elif 'Error Getting SEC_GET_STATUS' in out:
-		print "\t\t\tsecmon read error"
-		log.info( "\t\t\tssecmon read error")
+		log.error("\t\t\t(read_tamper_count)Possible reset")
+	elif len(out) < 10:
+		log.error( "\t\t\t(read_tamper_count)Possible reset too short")
+	elif 'Error Getting SEC_GET_STATUS' in out:
+		log.error( "\t\t\t(read_tamper_count)secmon read error")
 	elif 'TMP' in out[10]:
-                #print "length"
-                #print len(out)
+		test()
+		#print "length"
+		#print len(out)
 		# Brute force index values
 		count = int(out[10][7:])#TMP1
 		count += int(out[11][7:])#TMP2
@@ -39,34 +47,77 @@ def read_tamper_count():
 		count += int(out[14][7:])#TMP5
 		count += int(out[15][7:])#TMP6
 	else:	
-		print "\t\t\tTamper return not found."
-		log.info( "\t\t\tTamper ret not found")
+		log.error( "\t\t\tTamper ret not found")
 	return count
 
-def read_secdiag_val():
-	input = '/opt/maxim-ic/basic/examples/secmon /dev/secmon 5 ffe0200c'
+def read_tamper_count():
 	if (get_ser().isOpen()==False):
-                print "serial not available"
-                log.info( "\t\t\tserial not available")
-                return -1
+		log.error("serial not available")
+		return -1
+		
+	# send UART request	
+	input = '/opt/maxim-ic/basic/examples/secmon /dev/secmon 3'
+	get_ser().write(input.encode('ascii')+'\n')
+	time.sleep(1)
+
+	out = get_ser().readlines()
+	#generator: creates "matches list" only if parsed TMP info present.
+	matches = [x for x in out if "TMP" in x]
+	if not matches:
+		log.error("\t\t\t(read_tamper_count)Possible reset")
+		return -1
+	else:
+		count = 0
+		for y in matches:
+			count += int(y[7:])
+	return count
+
+def find_dev_secmon_name():
+	if (get_ser().isOpen()==False):
+		log.info( "\t\t\tserial not available")
+		return -1
+	input = 'ls /dev/secm*'
+	get_ser().write(input.encode('ascii')+'\n')
+	time.sleep(2)
+	out = get_ser().readlines()
+
+	if not out:
+		log.error( "\t\t\t(find_dev_secmon_name)Possible Reset")
+	elif "ls" is out:
+		log.error( "\t\t\t/dev/secmon not found")
+	else:
+		print out
+		s_index = out[1].find('dev')+4
+		e_index = out[1].find(r"\x1b", s_index)
+		print  out[1][s_index:e_index]
+		#set_secmon_devnm
+
+
+	
+	
+def read_secdiag_val():
+	input = '/opt/maxim-ic/basic/examples/secmon /dev/secmon0 5 ffe0200c'
+	if (get_ser().isOpen()==False):
+		log.info( "\t\t\t(read_secdiag_val)serial not available")
+        return -1
         
 	get_ser().write(input.encode('ascii')+'\n')
 	time.sleep(1)
 	out = get_ser().readlines()
-	#print out
+	print out
 	count = -1
 	if not out:
-                print "\t\t\tPossible reset"
-        elif len(out) < 15:
-                print "\t\t\tPossible reset too short"
-        elif 'Error reading' in out:
-		print "\t\t\tsecdiag read error"
+		log.error("\t\t\t(read_secdiag_val)Possible reset")
+	elif len(out) < 15:
+		log.error("\t\t\t(read_secdiag_val)Possible reset, too short")
+	elif 'Error reading' in out:
+		log.error("\t\t\t(read_secdiag_val)secdiag read error")
 	elif 'fee0200c =' in out[15]:
 		# Brute force index values
 		#print out[15][11:]
 		count = int(out[15][11:], 16)
 	else:	
-		print "Tamper secdiag return not found."
+		log.error("Tamper secdiag return not found.")
 	return count
 
 def print_secdiag(flag):
@@ -77,87 +128,67 @@ def print_secdiag(flag):
 	EXTF=7
 	TMP1=16;TMP2=17;TMP3=18;TMP4=19;TMP5=20;TMP6=21;
 	if get_bit(flag, DRS) == 1:
-                log.info( "DRS")
-		print "DRS"
+		log.info("DRS")
 	if get_bit(flag, KW) == 1:
-                log.info( "KW")
-		print "KW"
+		log.info("KW")
 	if get_bit(flag, SHEILD) == 1:
-                log.info( "SHEILD")
-		print "SHEILD"
+		log.info( "SHEILD")
 	if get_bit(flag, LOTEMP) == 1:
-                log.info( "LOTEMP")
-		print "LOTEMP"	
+		log.info( "LOTEMP")
 	if get_bit(flag, HITEMP) == 1:
-                log.info( "HITEMP")
-		print "HITEMP"
+		log.info( "HITEMP")
 	if get_bit(flag, BATLO) == 1:
-                log.info( "BATLO")
-		print "BATLO"
+		log.info( "BATLO")
 	if get_bit(flag, BATHI) == 1:
-                log.info( "BATHI")
-		print "BATHI"
+		log.info( "BATHI")
 	if get_bit(flag, EXTF) == 1:
-                log.info( "EXTF")
-		print "EXTF"		
+		log.info( "EXTF")
 	if get_bit(flag, TMP1) == 1:
-                log.info( "TMP1")
-		print "TMP1"		
+		log.info( "TMP1")
 	if get_bit(flag, TMP2) == 1:
-                log.info( "TMP2")
-		print "TMP2"		
+		log.info( "TMP2")
 	if get_bit(flag, TMP3) == 1:
-                log.info( "TMP3")
-		print "TMP3"		
+		log.info( "TMP3")
 	if get_bit(flag, TMP4) == 1:
-                log.info( "TMP4")
-		print "TMP4"		
+		log.info( "TMP4")
 	if get_bit(flag, TMP5) == 1:
-                log.info( "TMP5")
-		print "TMP5"		
+		log.info( "TMP5")
 	if get_bit(flag, TMP6) == 1:
-                log.info( "TMP6")
-		print "TMP6"		
+		log.info( "TMP6")
 	
-
 def check_secdiag():
 	flag = read_secdiag_val()
 	print_secdiag(flag)
-	
-	
+
 def set_tamper_trigger(num):
-	input = '/opt/maxim-ic/basic/examples/secmon /dev/secmon 4 ' + str(num)
+	input = '/opt/maxim-ic/basic/examples/secmon /dev/secmon0 4 ' + str(num)
 	if (get_ser().isOpen()==False):
-                log.info( "\t\t\tserial not available")
-                print "\t\t\tserial not available"
-                return
+		log.info( "\t\t\tserial not available")
+		return
 	get_ser().write(input.encode('ascii')+'\n')
 	time.sleep(1)
 	out = get_ser().readlines()
 	if 'Error Getting SEC_GET_STATUS' in out:
-		print "\t\t\tsecmon read error"
+		log.info("\t\t\tsecmon read error")
 	
 def read_rtc_count():
-	input = '/opt/maxim-ic/basic/examples/secmon /dev/secmon 3'
-        if (get_ser().isOpen()==False):
-                print "\t\t\tserial not available"
-                log.info( "\t\t\tserial not available")
-                return -1
+	input = '/opt/maxim-ic/basic/examples/secmon /dev/secmon0 3'
+	if (get_ser().isOpen()==False):
+		log.info( "\t\t\tserial not available")
+		return -1
 
 	get_ser().write(input.encode('ascii')+'\n')
 	time.sleep(2)
 	out = get_ser().readlines()
 	count = -1
 	if not out:
-                print "\t\t\tPossible reset"
-                log.info( "\t\t\tPossible Reset")
-        elif len(out) < 16:
-                print "\t\t\tPossible reset too short"
-                log.info( "\t\t\tToo Short Possible reset")
-        elif 'Error Getting SEC_GET_STATUS' in out:
-		print "\t\t\tsecmon read error"
+		log.error( "\t\t\t(read_rtc_count)Possible Reset")
+	elif len(out) < 16:
+		log.error( "\t\t\t(read_rtc_count)Too Short Possible reset")
+	elif 'Error Getting SEC_GET_STATUS' in out:
+		log.error("\t\t\t(read_rtc_count)secmon read error")
 	elif 'RTC' not in out[16]:
-		print "secmon cmd not found"
+		log.error("(read_rtc_count)secmon cmd not found")
 	else:	
 		count = int(out[16][6:]) #RTC
 	return count
@@ -168,11 +199,13 @@ def read_rtc_count():
 
 if __name__=='__main__':
 	_ser_init()
-	print "Tamper Readings"
-	#print read_tamper_count()
-	#print read_rtc_count()
-	#print "RTC Above"
-	#print set_tamper_trigger("f")
-	flag = read_secdiag_val()
-	print_secdiag(flag)
+	#find_dev_secmon_name()
+	log.info("Tamper Readings")
+	#log.info(read_tamper_count())
+	#log.info(read_rtc_count())
+	#log.info("RTC Above")
+	#log.info(set_tamper_trigger("f"))
+	#flag = read_secdiag_val()
+	#print_secdiag(flag)
+	read_tamper_count()
 	
