@@ -2,7 +2,7 @@
 import time
 import os
 import logging
-from serial_cm import get_ser, log, _ser_init, uart_self_test
+from serial_cm import get_ser, _ser_init, uart_self_test ,log
 
 def find_ip_addr (node):
 	input = 'ifconfig'
@@ -27,7 +27,7 @@ def can_addr_ping(addr):
 	txt = open("temp.txt")
 	out = txt.readlines()
 	if "Destination host unreachable" in str(out):
-		log.warn("Ping Dest Unreachable")
+		log.error("Ping Dest Unreachable")
 		return ret
 	elif "Lost = 0" not in str(out):
 		print 'Ping Lost'

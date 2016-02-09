@@ -14,7 +14,9 @@ isCardP=[-1, -1]
 # Get timestamp of Python call:
 myts = time.time()	
 myst = datetime.datetime.fromtimestamp(myts).strftime('%Y-%m-%d+%H_%M_%S')
-
+fH = 0
+cH = 0
+#log = 0
 
 ##formatter = logging.Formatter('%(asctime)s:  %(message)s')
 ##hdlr.setFormatter(formatter)
@@ -38,8 +40,9 @@ def set_log_path(new):
 	filename = log_path_name+logger_name+str(myst)+'.log'
 	print('LOGGING new PATH is: %s' % filename)
 	return logging.FileHandler(filename,'wb')
-
+	
 def set_log_info(path, name):
+	global fH, cH
 	print "Log Path :\n"+ path
 	if not os.path.exists(path):
 		os.mkdir(path)
@@ -104,16 +107,34 @@ def _ser_init():
 	else:
 		print('Another UART blocking '+get_ser().name)	
 
-def ser_Init2(my_path, my_name):
-	_ser_init()
-	if become_root() == True:
-		log.info("Logged in OK: sci_basic detected")
-	else:
-		log.info("Failure: CNTL-C and restart")
+def _ser_end():		
+	global fH, cH
+	get_ser().close()
+	#cH.handlers = []
+	#fH.handlers = []
+	#log.handlers = []
 		
-	return set_log_info(my_path, my_name)	
+def serial_close():
+	_ser_end()
+		
+#def ser_Init2(my_path, my_name):
+#	_ser_init()
+#	if become_root() == True:
+#		log.info("Logged in OK: sci_basic detected")
+#	else:
+#		log.info("Failure: CNTL-C and restart")
+#		
+#	return set_log_info(my_path, my_name)	
 
-def ser_Init(my_path, my_name):
+def ser_Init():
+	_ser_init()
+
+	while become_root() == False:
+		print("\t\t\t\tChecking for ROOT\n")
+	print("\tROOT Detected!!")
+	#return set_log_info(my_path, my_name)
+
+def ser_Init_old_with_logging(my_path, my_name):
 	_ser_init()
 
 	while become_root() == False:

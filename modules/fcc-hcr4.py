@@ -7,7 +7,7 @@ import logging
 import time, datetime
 import os
 
-from serial_cm import ser_Init, get_ser, log, set_log_info, uart_self_test
+from serial_cm import ser_Init, get_ser, set_log_info, uart_self_test, serial_close, log
 from smart_card import isCardPresent, getEnvData
 from ping import find_ip_addr, can_addr_ping
 from sec_mon_hcr4 import read_tamper_count, read_rtc_count, set_tamper_trigger, check_secdiag
@@ -21,6 +21,24 @@ wait_time = 30
 #Main Code Here
 ##################################################
 if __name__=='__main__':
+
+##############USER DEFINED##################################################################################			
+	##Overwrite Log location	
+	my_path = '..\\fcc_log\\'
+	my_name = 'fcc_test'
+	tamper_flag = '0' 	# 0-OFF, f-tamper 0,1,2,3 active, 3f-All Tampers and Latches (not this test) Active and triggered
+							# 1 - Tamper1 armed
+							# 2 - Tamper2 armed
+							# 3 - Tampers 1&2 armed
+							# 4 - Tamper3 armed
+							# ... binary flag to enable each tamper.
+##############USER DEFINED##################################################################################
+
+
+##One time setup
+	log = set_log_info(my_path, my_name)
+
+
 	
 	while True:
 		isCardP=[-1, -1]
@@ -34,24 +52,13 @@ if __name__=='__main__':
 		tamper_count 	= 0
 		rtc_stamp 	= 0
 		total_count 	= 0
+		MAX_COM_RETRY	= 5	
 ################################		
 	
-##############USER DEFINED##################################################################################			
-	##Overwrite Log location	
-		my_path = '..\\fcc_log\\'
-		my_name = 'fcc_test'
-		tamper_flag = '0' 	# 0-OFF, f-tamper 0,1,2,3 active, 3f-All Tampers and Latches (not this test) Active and triggered
-							# 1 - Tamper1 armed
-							# 2 - Tamper2 armed
-							# 3 - Tampers 1&2 armed
-							# 4 - Tamper3 armed
-							# ... binary flag to enable each tamper.
-		
-##############USER DEFINED##################################################################################
 
 ##############INIT #################					
 		prev_dev = "Not Init"
-		log = ser_Init(my_path, my_name)
+		ser_Init()
 		#Requires Serial init
 		hostname = find_ip_addr('eth0')
 		set_tamper_trigger(tamper_flag)
@@ -113,11 +120,12 @@ if __name__=='__main__':
 				time.sleep(1)
 				if(x < 0):
 					count+=1
-					log.debug("\t\t\tFailed %d for Card %d", count, i)
+					log.error("\t\t\tFailed %d for Card %d", count, i)
 					#if 5 failed reads in a row, the system may have reset.
-					if count > 5:
+					if count > MAX_COM_RETRY:
 						log.error("\t\t\tReading stopped, Reboot restarting script.\n\n\n")
-						get_ser().close()
+						serial_close()
+						
 						run = 0
 						break
 				elif x == 0:
