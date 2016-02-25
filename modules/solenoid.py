@@ -1,12 +1,14 @@
 #! python
 
 import time
-from serial_cm import get_ser
+from serial_cm import ser_Init, get_ser, set_log_info, serial_close, log
 
 PULL_ON = 2		#mean card latched
 PULL_OFF = 3	#means card free
 POWER_ON = 6
 POWER_DOWN = 7
+LATCHED_OPEN = 8
+LATCHED_CLOSE = 9
 
 def latch_config (num):
 	ser = get_ser()
@@ -17,41 +19,90 @@ def latch_config (num):
 	out = ser.readlines()
 	return True
 
+def latched_open ():
+	latch_config(LATCHED_OPEN)
+	log.debug("\n latched_open\n")
+	return True
+	
+def latched_close ():
+	latch_config(LATCHED_CLOSE)
+	log.debug("\n latched_close\n")
+	return True
+	
+	
+	
 def pull_on ():
 	latch_config(PULL_ON)
-	#print "pull_on"
+	log.debug("pull_on")
 	return True
 
 def pull_off ():
 	latch_config(PULL_OFF)
-	#print "pull_off"
+	log.debug("pull_off")
 	return True
 
 def power_on ():
 	latch_config(POWER_ON)
-	#print "power_on"
+	log.debug("power_on")
 	return True
 
 def power_off ():
 	latch_config(POWER_DOWN)
-	#print "power_off"
+	log.debug("power_off")
 	return True
 
 def card_bay_open():
 	power_on()
 	pull_off()
-	time.sleep(2)
+	time.sleep(1)
 	power_off()
-	print "card_bay_open -Plunger pushed forward, locked by magnet"
+	#print "card_bay_open -Plunger pushed forward, locked by magnet"
+	log.debug(" ---card_bay_open---")
 
 def card_bay_locked():
 	power_on()
 	pull_on()
-	time.sleep(2)
+	time.sleep(1)
 	power_off()
-	print "card_bay_locked -Plunger pulled back"
+	#print "card_bay_locked -Plunger pulled back"
+	log.debug(" ---card_bay_lock---")
 
 def card_bay_init():
 	power_on()
 	pull_off()
 	power_off()
+	
+	
+if __name__=='__main__':
+##############USER DEFINED##################################################################################			
+##Overwrite Log location	
+	my_path = '..\\solenoid_log\\'
+	my_name = 'solendoid_test'
+	test_count = 100
+##############USER DEFINED##################################################################################
+
+##One time setup
+	loggy = set_log_info(my_path, my_name, 0)
+	
+	while True:
+		test_count 			= 0
+########Passing Counters########
+		total_count 	= 0
+		run = 1
+################################		
+	
+
+##############INIT #################					
+		ser_Init()
+		#card_bay_init()
+##############INIT END##############		
+		loggy.info('Start %s Test', my_name)
+		loggy.info('Test :\n Solenoid')
+
+		while run:
+			#Total Test Cycles
+			#log.info( "\n")
+			total_count+=1
+			loggy.debug( "Total Test Cycles = %d", total_count)
+			time.sleep(1)
+			
