@@ -4,7 +4,8 @@ import time, datetime
 
 import Tkinter
 
-from serial_cm import ser_Init, get_ser, log
+from serial_cm import ser_Init, get_ser
+from log_cm import set_log_info, set_log_level, get_log_cm
 from smart_card import isCardPresent, getEnvData
 from solenoid import card_bay_locked, card_bay_open, card_bay_init, power_off
 
@@ -47,13 +48,13 @@ if __name__=='__main__':
 							if i == 1:
 								card_bay_locked() #plunger is pulled
 								print "%s Card %d Present & Locked" % (st, i)
-								log.info("%s Card %d Present & Locked" % (st, i))
+								get_log_cm().info("%s Card %d Present & Locked" % (st, i))
 							else:
 								print "%s Card %d Present" % (st, i)
-								log.info("%s Card %d Present" % (st, i))
+								get_log_cm().info("%s Card %d Present" % (st, i))
 							emv_data = getEnvData(i)
 							print ("%s Card %d ATR %s" % (st, i, emv_data))
-							log.info("%s Card %d ATR %s" % (st, i, emv_data))
+							get_log_cm().info("%s Card %d ATR %s" % (st, i, emv_data))
 							#Print ASCII, if data is available
 							if "No EMV Support" not in str(emv_data):
 								characters = emv_data.replace(' ', '')
@@ -61,7 +62,7 @@ if __name__=='__main__':
 							if i == 1:
 								card_bay_open() #Plunger goes forward
 								print "%s Card %d Bay opened, Remove Card Quickly!!" % (st, i)
-								log.info("%s Card %d Bay opened, Remove Card Quickly!!" % (st, i))
+								get_log_cm().info("%s Card %d Bay opened, Remove Card Quickly!!" % (st, i))
 						else:
 							print "%s Card %d Removed" % (st, i)
-							log.info("%s Card %d Removed" % (st, i))
+							get_log_cm().info("%s Card %d Removed" % (st, i))

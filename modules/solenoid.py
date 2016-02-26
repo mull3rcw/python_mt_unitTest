@@ -1,7 +1,8 @@
 #! python
 
 import time
-from serial_cm import ser_Init, get_ser, set_log_info, serial_close, log
+from serial_cm import ser_Init, get_ser, serial_close
+from log_cm import set_log_info, set_log_level, get_log_cm
 
 PULL_ON = 2		#mean card latched
 PULL_OFF = 3	#means card free
@@ -21,34 +22,34 @@ def latch_config (num):
 
 def latched_open ():
 	latch_config(LATCHED_OPEN)
-	log.debug("\n latched_open\n")
+	get_log_cm().debug("\n latched_open\n")
 	return True
 	
 def latched_close ():
 	latch_config(LATCHED_CLOSE)
-	log.debug("\n latched_close\n")
+	get_log_cm().debug("\n latched_close\n")
 	return True
 	
 	
 	
 def pull_on ():
 	latch_config(PULL_ON)
-	log.debug("pull_on")
+	get_log_cm().debug("pull_on")
 	return True
 
 def pull_off ():
 	latch_config(PULL_OFF)
-	log.debug("pull_off")
+	get_log_cm().debug("pull_off")
 	return True
 
 def power_on ():
 	latch_config(POWER_ON)
-	log.debug("power_on")
+	get_log_cm().debug("power_on")
 	return True
 
 def power_off ():
 	latch_config(POWER_DOWN)
-	log.debug("power_off")
+	get_log_cm().debug("power_off")
 	return True
 
 def card_bay_open():
@@ -57,7 +58,7 @@ def card_bay_open():
 	time.sleep(1)
 	power_off()
 	#print "card_bay_open -Plunger pushed forward, locked by magnet"
-	log.debug(" ---card_bay_open---")
+	get_log_cm().debug(" ---card_bay_open---")
 
 def card_bay_locked():
 	power_on()
@@ -65,7 +66,7 @@ def card_bay_locked():
 	time.sleep(1)
 	power_off()
 	#print "card_bay_locked -Plunger pulled back"
-	log.debug(" ---card_bay_lock---")
+	get_log_cm().debug(" ---card_bay_lock---")
 
 def card_bay_init():
 	power_on()
@@ -78,12 +79,10 @@ if __name__=='__main__':
 ##Overwrite Log location	
 	my_path = '..\\solenoid_log\\'
 	my_name = 'solendoid_test'
-	test_count = 100
+	test_count = 10
 ##############USER DEFINED##################################################################################
 
 ##One time setup
-	loggy = set_log_info(my_path, my_name, 0)
-	
 	while True:
 		test_count 			= 0
 ########Passing Counters########
@@ -93,16 +92,17 @@ if __name__=='__main__':
 	
 
 ##############INIT #################					
+		set_log_info(my_path, my_name)
 		ser_Init()
 		#card_bay_init()
 ##############INIT END##############		
-		loggy.info('Start %s Test', my_name)
-		loggy.info('Test :\n Solenoid')
+		get_log_cm().info('Start %s Test', my_name)
+		get_log_cm().info('Test :\n Solenoid')
 
 		while run:
 			#Total Test Cycles
-			#log.info( "\n")
+			#get_log_cm().info( "\n")
 			total_count+=1
-			loggy.debug( "Total Test Cycles = %d", total_count)
+			get_log_cm().debug( "Total Test Cycles = %d", total_count)
 			time.sleep(1)
 			

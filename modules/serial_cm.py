@@ -1,72 +1,13 @@
 #! python
-import serial, time, datetime, logging, os
+
+import serial, time, datetime, os
+from log_cm import get_log_cm, set_log_info
 
 ##################################################
 #USER/Machine SPECIFIC, change UART to MATCH YOURS!!!!
 port = 'COM1'
-path = '..\log\\'
-brk = '\\'
-log_name = 'check_card_log'
-
-##################################################
 baud = 57600
-isCardP=[-1, -1]
-# Get timestamp of Python call:
-myts = time.time()	
-myst = datetime.datetime.fromtimestamp(myts).strftime('%Y-%m-%d+%H_%M_%S')
-fH = 0
-cH = 0
-#log = 0
-
-##formatter = logging.Formatter('%(asctime)s:  %(message)s')
-##hdlr.setFormatter(formatter)
-##log.addHandler(hdlr) 
-#log.setLevel(logging.DEBUG)
-##log.setLevel(logging.INFO)
-
 ########################
-ser = 0
-log_path_name = path
-logger_name = 'check_card'
-
-def set_logger_name(new):
-	global logger_name
-	logger_name = new
-	return logging.getLogger(logger_name)
-
-def set_log_path(new):
-	global log_path_name
-	log_path_name = new
-	filename = log_path_name+logger_name+str(myst)+'.log'
-	print('LOGGING new PATH is: %s' % filename)
-	return logging.FileHandler(filename,'wb')
-	
-def set_log_info(path, name):
-	global fH, cH
-	print "Log Path :\n"+ path
-	if not os.path.exists(path):
-		os.mkdir(path)
-
-	# Configure Path/Create handles
-	log = set_logger_name(name)
-	fH = set_log_path(path)
-	cH = logging.StreamHandler()
-	
-	#Overall logging mask, leave alone.
-	log.setLevel(logging.DEBUG)
-	
-	# Logging to File	
-	log_formatter = logging.Formatter("%(asctime)s [%(levelname)-5.5s]  %(message)s")
-	fH.setFormatter(log_formatter)
-	fH.setLevel(logging.DEBUG)
-	log.addHandler(fH) 
-	
-	# Logging to Console
-	console_formatter = logging.Formatter("%(asctime)s [%(levelname)-5.5s]  %(message)s")
-	cH.setFormatter(console_formatter)
-	cH.setLevel(logging.INFO)
-	log.addHandler(cH)
-	return log
 	
 def set_ser(new):
 	global ser
@@ -74,14 +15,10 @@ def set_ser(new):
 
 def get_ser():
 	global ser
+	if 'ser' not in globals():
+		get_log_cm().error("Error: ser not init")
+		return -1
 	return ser 
-
-
-###################################################
-### LOGGING
-###################################################
-filename = path+log_name+str(myst)+'.log'
-log = set_log_info(path, 'check_card')
 
 ########################
 #Initialize Access
@@ -97,65 +34,41 @@ def _ser_init():
 			get_ser().open()
 			wait4ser=False
 		except serial.SerialException:
-			log.info("Oops! waiting 15 seconds. Is the serial port %s available" % port)
+			get_log_cm().info("Oops! waiting 15 seconds. Is the serial port %s available" % port)
 			wait4ser=True
 			set_ser(0)
 			time.sleep(15)
 		
 	if get_ser().isOpen():
-		print(get_ser().name + ' is open...')
+		get_log_cm().info(get_ser().name + ' is open...')
 	else:
-		print('Another UART blocking '+get_ser().name)	
+		get_log_cm().error('Another UART blocking '+get_ser().name)	
 
 def _ser_end():		
 	global fH, cH
 	get_ser().close()
-	#cH.handlers = []
-	#fH.handlers = []
-	#log.handlers = []
 		
 def serial_close():
 	_ser_end()
 		
-#def ser_Init2(my_path, my_name):
-#	_ser_init()
-#	if become_root() == True:
-#		log.info("Logged in OK: sci_basic detected")
-#	else:
-#		log.info("Failure: CNTL-C and restart")
-#		
-#	return set_log_info(my_path, my_name)	
-
 def ser_Init():
 	_ser_init()
 
 	while become_root() == False:
-		print("\t\t\t\tChecking for ROOT\n")
-	print("\tROOT Detected!!")
-	#return set_log_info(my_path, my_name)
-
-def ser_Init_old_with_logging(my_path, my_name):
-	_ser_init()
-
-	while become_root() == False:
-		print("\t\t\t\tChecking for ROOT\n")
-	print("\tROOT Detected!!")
-	return set_log_info(my_path, my_name)
-
+		get_log_cm().debug("\t\t\t\tChecking for ROOT\n")
+	get_log_cm().info("\tROOT Detected!!")
 	
 def uart_self_test():
 	input = 'ls'
 	get_ser().write(input.encode('ascii')+'\n')
 	time.sleep(1)
 	out = str(get_ser().readlines())
-#	log.info("%s" % out)
 	if out is None:
 		return True
 	elif out == "[]":
 		return True
 	else:
 		return False
-	
 	
 def await_boot_complete():
 	input = 'ls'
@@ -164,27 +77,27 @@ def await_boot_complete():
 	out = str(get_ser().readlines())
 
 	if "jibe-eek login" in out:
-		log.info("Boot up Complete")
+		get_log_cm().info("Boot up Complete")
 		return "BootDone"
 	elif "root@jibe-eek examples" in out:
-		log.info("Root up Complete")
+		get_log_cm().info("Root up Complete")
 		return "RootDone"
 	elif "root@jibe-eek /root" in out:
-		log.info("Root Log Complete")
+		get_log_cm().info("Root Log Complete")
 		return "RootDone"	
 	elif "Password" in out:
 		input = 'ls'
 		get_ser().write(input.encode('ascii')+'\n')
 		time.sleep(5)
-		log.info("Boot up Complete:PW")
+		get_log_cm().info("Boot up Complete:PW")
 		return "BootDone"
 	else:
-		log.info("Awaiting Bootup")
+		get_log_cm().info("Awaiting Bootup")
 		input = 'cd /root'
 		get_ser().write(input.encode('ascii')+'\n')
 		time.sleep(2)
-		log.info("Awaiting Bootup")
-		log.info("%s" % out)
+		get_log_cm().info("Awaiting2 Bootup")
+		get_log_cm().info("%s" % out)
 		return "Pending"
 
 def become_root ():
@@ -224,17 +137,21 @@ def become_root ():
 	if "sci_basic" in str(out):
 		return True
 	else:
-		log.debug("FAIL to find SCIBASIC")
+		get_log_cm().debug("FAIL to find SCIBASIC")
 		input = 'pwd'
 		get_ser().write(input.encode('ascii')+'\n')
 		time.sleep(1)
-		log.info("%s" % str(get_ser().readlines()))
+		get_log_cm().info("%s" % str(get_ser().readlines()))
 		return False	
 
 if __name__=='__main__':
-	log.info("serial_cm.py")
-	that_path = '..\\fcc_log\\'
-	that_name = 'fcc_test'
-	log = ser_Init(that_path, that_name)
-	log.debug('DEBUG: Quick zephyrs daft.')
-	log.info('INFO:How jumping zebras vex.')
+
+	my_path = '..\\serial_log\\'
+	my_name = 'serial_test'
+	
+	set_log_info(my_path, my_name, 0)
+	ser_Init()
+	
+	get_log_cm().info("serial_cm.py")
+	get_log_cm().debug('DEBUG: Quick zephyrs daft.')
+	get_log_cm().info('INFO:How jumping zebras vex.')
