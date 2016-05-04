@@ -3,6 +3,8 @@ import time
 from serial_cm import ser_Init, get_ser, serial_close
 from log_cm import set_log_info, set_log_level, get_log_cm
 
+MAX_COM_RETRY	= 5
+
 def getEnvData (num):
 	#load num into sc* cmd line
 	ser = get_ser()
@@ -33,13 +35,13 @@ def isCardPresent (num):
 	ser.write(input2.encode('ascii')+'\n')
 	out = ser.readlines()
 	if "NOK" in str(out):
-		#print "Card Missing"
+		print "Card Missing"
 		return False
 	elif " OK" in str(out):
-		#print "Card Present"
+		print "Card Present"
 		return True
 	else:
-		#print "Failed to read"
+		print "Failed to read"
 		return -1
 
 
@@ -116,7 +118,7 @@ if __name__=='__main__':
 	my_path = '..\\smart_card_log\\'
 	my_name = 'smart_card_test'
 	test_count = 100
-	log = set_log_info(my_path, my_name)
+	log = set_log_info(my_path, my_name, 0)
 ##############USER DEFINED##################################################################################
 
 ##One time setup

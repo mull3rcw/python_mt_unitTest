@@ -9,9 +9,9 @@ import os
 
 from log_cm import set_log_info, set_log_level, get_log_cm
 from serial_cm import ser_Init, get_ser, uart_self_test, serial_close
-from smart_card import isCardPresent, getEnvData
+from smart_card import isCardPresent, getEnvData, read_smart_card
 from ping import find_ip_addr, can_addr_ping
-from sec_mon_hcr4 import read_tamper_count, read_rtc_count, set_tamper_trigger, check_secdiag
+from sec_mon_hcr4 import read_tamper_count, read_rtc_count, set_tamper_trigger
 
 
 ##################################################
@@ -19,22 +19,22 @@ from sec_mon_hcr4 import read_tamper_count, read_rtc_count, set_tamper_trigger, 
 ##################################################
 if __name__=='__main__':
 
-##############USER DEFINED##################################################################################			
-	##Overwrite Log location	
+##############USER DEFINED########################
+	##Overwrite Log location
 	my_path = '..\\fcc_log\\'
 	my_name = 'fcc_test'
-	tamper_flag = 'f' 	# 0-OFF, f-tamper 0,1,2,3 active, 3f-All Tampers and Latches (not this test) Active and triggered
+	tamper_flag = 15 	# 0-OFF, f-tamper 0,1,2,3 active, 3f-All Tampers and Latches (not this test) Active and triggered
 							# 1 - Tamper1 armed
 							# 2 - Tamper2 armed
 							# 3 - Tampers 1&2 armed
 							# 4 - Tamper3 armed
 							# ... binary flag to enable each tamper.
-##############USER DEFINED##################################################################################
+##############USER DEFINED######################
 
 
 ##One time setup
 	set_log_info(my_path, my_name, 0)
-	
+
 	while True:
 		isCardP=[-1, -1]
 		run 			= 1
@@ -47,17 +47,17 @@ if __name__=='__main__':
 		tamper_count 	= 0
 		rtc_stamp 	= 0
 		total_count 	= 0
-		MAX_COM_RETRY	= 5	
-################################		
-	
+		MAX_COM_RETRY	= 5
+################################
 
-##############INIT #################					
+
+##############INIT #################
 		prev_dev = "Not Init"
 		ser_Init()
 		#Requires Serial init
 		hostname = find_ip_addr('eth0')
 		set_tamper_trigger(tamper_flag)
-##############INIT END##############		
+##############INIT END##############
 		get_log_cm().info('Start FCC Test')
 		get_log_cm().info('Test :\n UART, Ethernet, USB, SmartCard')
 
@@ -66,17 +66,17 @@ if __name__=='__main__':
 			#get_log_cm().info( "\n")
 			total_count+=1
 			get_log_cm().debug( "Total Test Cycles = %d", total_count)
-			
+
 			#Ethernet Test:###########################################################
 			###Find HCR-4 IP Address####
 			if hostname != -1:
 				ret = can_addr_ping(hostname)
 				if ret == True:
 					ethernet_count+=1
-					
+
 			get_log_cm().info( "Ethernet Count = \t\t%d of %d", ethernet_count, total_count)
 			#Ethernet Test end:#######################################################
-			
+
 			#UART:####################################################################
 			ret = uart_self_test()
 			if ret == False:
@@ -85,90 +85,62 @@ if __name__=='__main__':
 			#UART end:################################################################
 
 			#USB:####################################################################
-			dev = usb.core.find(idVendor=0x0525, idProduct=0xA4AC) #HCR-4 	
-			if dev is None:
-				#raise ValueError('Device not found')
-				get_log_cm().error('\t\t\tUSB Device not found')
-			elif dev is 'NoneType':
-				get_log_cm().error('\t\t\tUSB Device noneType found')
-			elif prev_dev == "Not Init":
-				#First time is free
-				usb_count += 1
-				prev_dev = dev
-			else:	
-				get_log_cm().debug( "PREV VENDOR %s" % prev_dev.idVendor)
-				get_log_cm().debug("DEV VENDOR %s" % dev.idVendor)
-				if prev_dev.idVendor == dev.idVendor and prev_dev.idProduct == dev.idProduct:
-					usb_count += 1
-				prev_dev = dev	
 
+			dev = usb.core.find(find_all=True)
+			time.sleep(1)
+			if prev_dev == "Not Init":
+				for cfg in dev:
+					if cfg.idVendor == 0x0525:
+						prev_dev = cfg
+						usb_count += 1
+			elif prev_dev != "Not Init":
+				for cfg in dev:
+					if cfg is None:
+						get_log_cm().error('\t\t\tUSB Device not found')
+					elif cfg is 'NoneType':
+						get_log_cm().error('\t\t\tUSB Device noneType found')
+					else:
+						if prev_dev.idVendor == cfg.idVendor and prev_dev.idProduct == cfg.idProduct:
+							#get_log_cm().debug( "PREV VENDOR %s\n" % prev_dev.idVendor)
+							#get_log_cm().debug("cfg VENDOR %s\n" % cfg.idVendor)
+							usb_count += 1
 			get_log_cm().info( "USB Count = \t\t\t%d of %d", usb_count, total_count)
 
 			#USB end:################################################################
 
 			#SMARTCARD Test:##########################################################
-			#Per Smart Card(2)
-			#2 card, clear flag each time
-			c_present = 1		#changed 1,2 from 0,2 and c_present as 1, ignoring SAM card.
+			#Only testing card 1 in range below
 			for i in range(1,2):
-				x = isCardPresent(i)
-				time.sleep(1)
-				if(x < 0):
-					count+=1
-					get_log_cm().error("\t\t\tFailed %d for Card %d", count, i)
-					#if 5 failed reads in a row, the system may have reset.
-					if count > MAX_COM_RETRY:
-						get_log_cm().error("\t\t\tReading stopped, Reboot restarting script.\n\n\n")
-						serial_close()
-						
+					val = read_smart_card(i)
+					if val == -1:
 						run = 0
 						break
-				elif x == 0:
-					get_log_cm().error("\t\t\tcard %d is Missing" % (i))
-				elif x == 1:
-					#Get ATR
-					count = 0
-					if x > 0:
-						isCardP[i] = x
-						ts = time.time()
-						st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
-						if isCardP[i] == True:
-							emv_data = getEnvData(i)
-							get_log_cm().debug("Card %d ATR %s" % (i, emv_data))
-							if "No EMV Support" not in str(emv_data):
-								characters = emv_data.replace(' ', '')
-								get_log_cm().debug("Card %d ATR string %s" % (i, characters.decode('hex')))
-								# check each card ATR
-								c_present+=1
-								#when both cards pass
-								if c_present == 2:
+					if val == 0:
 									smart_card_count += 1
-						else:
-							log.warn( "%s Card %d Removed" % (st, i))
-				else:
-					get_log_cm().error("x is %d UNKNOWN") % (x)
 			get_log_cm().info( "SmartCard Count = \t\t%d of %d", smart_card_count, total_count)
 			#SMARTCARD Test end:#######################################################
-			
+
 			#TAMPER:####################################################################
-			ret = read_tamper_count()
-			if ret < 0: #Read Failure
-				get_log_cm().error("\t\t\tTAMPER Read Failed")
-			elif ret > 0:
-				log.warn("TAMPER Found")
-			else:	
-				tamper_count += 1
-			get_log_cm().info( "TAMPER Count = \t\t%d of %d", tamper_count, total_count)
-			
-			#RTC
-			rtc_stamp = read_rtc_count()
-			if rtc_stamp < 0:
-				get_log_cm().error("\t\t\tPossible reset RTC")
-                        else:
-                get_log_cm().info( "last RTC Event = \t\t%d", rtc_stamp)
-			if rtc_stamp > 0:
-				check_secdiag()
+			if tamper_flag != 0:
+				get_log_cm().error("\t\t\tTAMPER %d\n\n", tamper_flag)
+				ret = read_tamper_count()
+				if ret < 0: #Read Failure
+					get_log_cm().error("\t\t\tTAMPER Read Failed")
+				elif ret > 0:
+						get_log_cm().info("TAMPER Found")
+				else:
+					tamper_count += 1
+				get_log_cm().info( "TAMPER Count = \t\t%d of %d", tamper_count, total_count)
+
+				#RTC
+				rtc_stamp = read_rtc_count()
+				if rtc_stamp < 0:
+					get_log_cm().error("\t\t\tPossible reset RTC")
+				else:
+					get_log_cm().info( "last RTC Event = \t\t%d", rtc_stamp)
+			else:
+				get_log_cm().error("\t\t\tTAMPER DISABLED\n")
+
 			#TAMPER end:################################################################
 			get_log_cm().info("\t\t\t==============================\n")
-			
-			
+

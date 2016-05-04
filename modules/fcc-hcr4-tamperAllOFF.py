@@ -11,7 +11,7 @@ from log_cm import set_log_info, set_log_level, get_log_cm
 from serial_cm import ser_Init, get_ser, uart_self_test, serial_close
 from smart_card import isCardPresent, getEnvData, read_smart_card
 from ping import find_ip_addr, can_addr_ping
-from sec_mon_hcr4 import read_tamper_count, read_rtc_count, set_tamper_trigger, check_secdiag
+from sec_mon_hcr4 import read_tamper_count, read_rtc_count, set_tamper_trigger
 
 
 ##################################################
@@ -23,7 +23,7 @@ if __name__=='__main__':
 	##Overwrite Log location
 	my_path = '..\\fcc_log\\'
 	my_name = 'fcc_test'
-	tamper_flag = '0' 	# 0-OFF, f-tamper 0,1,2,3 active, 3f-All Tampers and Latches (not this test) Active and triggered
+	tamper_flag = 0 	# 0-OFF, f-tamper 0,1,2,3 active, 3f-All Tampers and Latches (not this test) Active and triggered
 							# 1 - Tamper1 armed
 							# 2 - Tamper2 armed
 							# 3 - Tampers 1&2 armed
@@ -85,23 +85,25 @@ if __name__=='__main__':
 			#UART end:################################################################
 
 			#USB:####################################################################
-			dev = usb.core.find(idVendor=0x0525, idProduct=0xA4AC) #HCR-4
-			if dev is None:
-				#raise ValueError('Device not found')
-				get_log_cm().error('\t\t\tUSB Device not found')
-			elif dev is 'NoneType':
-				get_log_cm().error('\t\t\tUSB Device noneType found')
-			elif prev_dev == "Not Init":
-				#First time is free
-				usb_count += 1
-				prev_dev = dev
-			else:
-				get_log_cm().debug( "PREV VENDOR %s" % prev_dev.idVendor)
-				get_log_cm().debug("DEV VENDOR %s" % dev.idVendor)
-				if prev_dev.idVendor == dev.idVendor and prev_dev.idProduct == dev.idProduct:
-					usb_count += 1
-				prev_dev = dev
 
+			dev = usb.core.find(find_all=True)
+			time.sleep(1)
+			if prev_dev == "Not Init":
+				for cfg in dev:
+					if cfg.idVendor == 0x0525:
+						prev_dev = cfg
+						usb_count += 1
+			elif prev_dev != "Not Init":
+				for cfg in dev:
+					if cfg is None:
+						get_log_cm().error('\t\t\tUSB Device not found')
+					elif cfg is 'NoneType':
+						get_log_cm().error('\t\t\tUSB Device noneType found')
+					else:
+						if prev_dev.idVendor == cfg.idVendor and prev_dev.idProduct == cfg.idProduct:
+							#get_log_cm().debug( "PREV VENDOR %s\n" % prev_dev.idVendor)
+							#get_log_cm().debug("cfg VENDOR %s\n" % cfg.idVendor)
+							usb_count += 1
 			get_log_cm().info( "USB Count = \t\t\t%d of %d", usb_count, total_count)
 
 			#USB end:################################################################
@@ -117,24 +119,28 @@ if __name__=='__main__':
 						smart_card_count+=1
 			get_log_cm().info( "SmartCard Count = \t\t%d of %d", smart_card_count, total_count)
 			#SMARTCARD Test end:#######################################################
-			#TAMPER:####################################################################
-			ret = read_tamper_count()
-			if ret < 0: #Read Failure
-				get_log_cm().error("\t\t\tTAMPER Read Failed")
-			elif ret > 0:
-				log.warn("TAMPER Found")
-			else:
-				tamper_count += 1
-			get_log_cm().info( "TAMPER Count = \t\t%d of %d", tamper_count, total_count)
 
-			#RTC
-			rtc_stamp = read_rtc_count()
-			if rtc_stamp < 0:
-				get_log_cm().error("\t\t\tPossible reset RTC")
+			#TAMPER:####################################################################
+			if tamper_flag != 0:
+				get_log_cm().error("\t\t\tTAMPER %d\n\n", tamper_flag)
+				ret = read_tamper_count()
+				if ret < 0: #Read Failure
+					get_log_cm().error("\t\t\tTAMPER Read Failed")
+				elif ret > 0:
+					get_log_cm().info("TAMPER Found")
+				else:
+					tamper_count += 1
+				get_log_cm().info( "TAMPER Count = \t\t%d of %d", tamper_count, total_count)
+
+				#RTC
+				rtc_stamp = read_rtc_count()
+				if rtc_stamp < 0:
+					get_log_cm().error("\t\t\tPossible reset RTC")
+				else:
+					get_log_cm().info( "last RTC Event = \t\t%d", rtc_stamp)
 			else:
-				get_log_cm().info( "last RTC Event = \t\t%d", rtc_stamp)
-			if rtc_stamp > 0:
-				check_secdiag()
+				get_log_cm().error("\t\t\tTAMPER DISABLED\n")
+
 			#TAMPER end:################################################################
 			get_log_cm().info("\t\t\t==============================\n")
 

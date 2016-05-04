@@ -165,7 +165,7 @@ if __name__=='__main__':
 			if rtc_stamp < 0:
 				get_log_cm().error("\t\t\tPossible reset RTC")
 			else:
-                get_log_cm().info( "last RTC Event = \t\t%d", rtc_stamp)
+				get_log_cm().info("last RTC Event = \t\t%d", rtc_stamp)
 			if rtc_stamp > 0:
 				check_secdiag()
 			#TAMPER end:################################################################
