@@ -75,6 +75,8 @@ def uart_self_test():
 		return True
 	elif out == "[]":
 		return True
+	elif "SecureBoot" in out:
+		return True
 	else:
 		return False
 
@@ -90,6 +92,13 @@ def await_boot_complete():
 	elif "root@jibe-eek examples" in out:
 		get_log_cm().info("Root up Complete")
 		return "RootDone"
+	elif "SecureBoot/disabled (EvKit-revC-B5)>" in out:
+		get_log_cm().info("U-Boot detected, reset u-boot and wait 40 seconds")
+		input = 'reset'
+		get_ser().write(input.encode('ascii')+'\n')
+		time.sleep(40)
+		get_log_cm().info("Go Back to listening")
+		return "Pending"
 	elif "root@jibe" in out:
 		get_log_cm().info("Root Log Complete")
 		return "RootDone"

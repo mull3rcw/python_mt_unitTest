@@ -1,5 +1,4 @@
 #!/usr/bin/python
-
 import usb.core
 import usb.util
 import sys
@@ -12,7 +11,7 @@ from serial_cm import ser_Init, get_ser, uart_self_test, serial_close
 from smart_card import isCardPresent, getEnvData, read_smart_card
 from ping import find_ip_addr, can_addr_ping
 from sec_mon_hcr4 import read_tamper_count, read_rtc_count, set_tamper_trigger
-
+from ucl import read_stest_count
 
 ##################################################
 #Main Code Here
@@ -22,18 +21,21 @@ if __name__=='__main__':
 ##############USER DEFINED########################
 	##Overwrite Log location
 	my_path = '..\\fcc_log\\'
-	my_name = 'fcc_test'
+	my_name = 'Thermal_test'
 	tamper_flag = 0 	# 0-OFF, f-tamper 0,1,2,3 active, 3f-All Tampers and Latches (not this test) Active and triggered
 							# 1 - Tamper1 armed
 							# 2 - Tamper2 armed
 							# 3 - Tampers 1&2 armed
 							# 4 - Tamper3 armed
 							# ... binary flag to enable each tamper.
+
+	DELAY_PER_CYCLE = 3
 ##############USER DEFINED######################
 
 
 ##One time setup
-	set_log_info(my_path, my_name, 0)
+	set_log_info(my_path, my_name)
+	#DEBUG set_log_info(my_path, my_name, 0)
 
 	while True:
 		isCardP=[-1, -1]
@@ -46,8 +48,11 @@ if __name__=='__main__':
 		smart_card_count 	= 0
 		tamper_count 	= 0
 		rtc_stamp 	= 0
+		crypto_count = 0
 		total_count 	= 0
 		MAX_COM_RETRY	= 5
+		SECONDS_PMIN = 60
+		MINUTES_DELAY = (SECONDS_PMIN * DELAY_PER_CYCLE)
 ################################
 
 
@@ -139,8 +144,22 @@ if __name__=='__main__':
 				else:
 					get_log_cm().info( "last RTC Event = \t\t%d", rtc_stamp)
 			else:
-				get_log_cm().error("\t\t\tTAMPER DISABLED\n")
+				get_log_cm().debug("\t\t\t No Tamper nodes enabled\n")
 
 			#TAMPER end:################################################################
-			get_log_cm().info("\t\t\t==============================\n")
+			#CRYPTO:####################################################################
+			ret = 0
+			#Read Crypto 5 times to exercise Crypto block
+			for i in range(0,5):
+				ret += read_stest_count()
+			if ret < 0: #Read Failure
+				get_log_cm().error("\t\t\t Crypto Read Failed")
+			elif ret > 0:
+				get_log_cm().info("Crypto Found")
+			else:
+				crypto_count += 1
+			get_log_cm().info( "Crypto Count = \t\t%d of %d", crypto_count, total_count)
+			#CRYPTO end:################################################################
+			get_log_cm().info("\t\t\t======SLEEP %d Minutes ========================\n", DELAY_PER_CYCLE)
+			time.sleep(MINUTES_DELAY)
 

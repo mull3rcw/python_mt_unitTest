@@ -122,7 +122,7 @@ if __name__=='__main__':
 
 			#TAMPER:####################################################################
 			if tamper_flag != 0:
-				get_log_cm().error("\t\t\tTAMPER %d\n\n", tamper_flag)
+				get_log_cm().debug("\t\t\t Tamper Flag is %X\n\n", tamper_flag)
 				ret = read_tamper_count()
 				if ret < 0: #Read Failure
 					get_log_cm().error("\t\t\tTAMPER Read Failed")

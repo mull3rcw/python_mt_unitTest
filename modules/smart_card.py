@@ -8,8 +8,7 @@ MAX_COM_RETRY	= 5
 def getEnvData (num):
 	#load num into sc* cmd line
 	ser = get_ser()
-	input = '/opt/maxim-ic/basic/examples/sci_basic /dev/sc 10'
-	#input = './sci_basic /dev/sc 10'
+	input = '/opt/maxim-ic/hcr4/apps/sci /dev/sc 10'
 	index = input.find(' 10')
 	input2 = input[:index] + str(num) + input[index:]
 	ser.write(input2.encode('ascii')+'\n')
@@ -28,20 +27,20 @@ def getEnvData (num):
 def isCardPresent (num):
 	# check list for NOK or OK
 	ser = get_ser()
-	input = '/opt/maxim-ic/basic/examples/sci_basic /dev/sc 3'
+	input = '/opt/maxim-ic/hcr4/apps/sci /dev/sc 3'
 	index = input.find(' 3')
 	input2 = input[:index] + str(num) + input[index:]
-	#print input2
+
 	ser.write(input2.encode('ascii')+'\n')
 	out = ser.readlines()
 	if "NOK" in str(out):
-		print "Card Missing"
+		get_log_cm().error("Card Missing")
 		return False
 	elif " OK" in str(out):
-		print "Card Present"
+		get_log_cm().debug("Card Present")
 		return True
 	else:
-		print "Failed to read"
+		get_log_cm().error("Failed to read")
 		return -1
 
 
@@ -51,14 +50,14 @@ def setCardFacilitator ():
 	input = '/opt/maxim-ic/basic/examples/card_facilitator'
 	ser.write(input.encode('ascii')+'\n')
 	#Wait 2 seconds for Sam card
-	print "Pull out MSR read within 10 seconds"
+	get_log_cm().info("Pull out MSR read within 10 seconds")
 	out = str(ser.readlines())
-	print out
+	get_log_cm().info(out) 
 	time.sleep(10)
 	#Control-C
 	input = '\x03'
 	ser.write(input.encode('ascii')) #+'\n')
-	print "DONE"
+	get_log_cm().info("DONE")
 
 def set_fail_count(new):
 	global fail_count
@@ -67,7 +66,7 @@ def set_fail_count(new):
 def get_fail_count():
 	global fail_count
 	if 'fail_count' not in globals():
-		print "Error: fail_count not init"
+		get_log_cm().error("Error: fail_count not init")
 		fail_count=0
 	return fail_count
 
@@ -88,7 +87,7 @@ def read_smart_card(card_id):
 	time.sleep(1)
 	if(x < 0):
 		#Card failed to read
-		get_log_cm().error("\t\t\tcard %d failed to read" % (card_id))
+		get_log_cm().error("\t\tcard %d failed to read" % (card_id))
 		run = handle_failed_card_read()
 		if run == False:
 			return -1
@@ -137,7 +136,7 @@ if __name__=='__main__':
 		#card_bay_init()
 ##############INIT END##############
 		get_log_cm().info('Start %s Test', my_name)
-		get_log_cm().info('Test :\n Smart Card')
+		get_log_cm().info('Test: Smart Card')
 
 		while run:
 			total_count+=1
@@ -153,4 +152,4 @@ if __name__=='__main__':
 						smart_card_count+=1
 			#SMARTCARD Test:##########################################################
 			get_log_cm().info( "SmartCard Count = \t\t%d of %d", smart_card_count, total_count)
-			get_log_cm().info("\==============================\n")
+			get_log_cm().info("==============================\n")
