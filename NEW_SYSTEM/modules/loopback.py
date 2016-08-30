@@ -1,0 +1,68 @@
+#! python
+
+import time, datetime
+
+import Tkinter
+
+from serial_cm import ser_Init, get_ser
+from log_cm import set_log_info, set_log_level, get_log_cm
+from smart_card import isCardPresent, getEnvData
+from solenoid import card_bay_locked, card_bay_open, card_bay_init, power_off
+
+#Time delay when possible reboot detected.
+wait_time = 30
+
+##################################################
+#Main Code Here
+##################################################
+
+if __name__=='__main__':
+	
+	while True:
+		isCardP=[-1, -1]
+		run = 1
+		count = 0
+		ser_Init()
+		#card_bay_init()
+
+		while run:
+			for i in range(0,2):
+				x = isCardPresent(i)
+				# if -1, then it failed to read (maybe reset).
+				if(x < 0):
+					count+=1
+					#if 5 failed reads in a row, the system may have reset.
+					if count > 5:
+						print ("Reading stopped, Reboot suspected")
+						get_ser().close()
+						run = 0
+						break
+				else:	
+					#Get Transition Change
+					count = 0
+					if isCardP[i] != x:
+						isCardP[i] = x
+						ts = time.time()
+						st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
+						if isCardP[i] == True:
+							if i == 1:
+								card_bay_locked() #plunger is pulled
+								print "%s Card %d Present & Locked" % (st, i)
+								get_log_cm().info("%s Card %d Present & Locked" % (st, i))
+							else:
+								print "%s Card %d Present" % (st, i)
+								get_log_cm().info("%s Card %d Present" % (st, i))
+							emv_data = getEnvData(i)
+							print ("%s Card %d ATR %s" % (st, i, emv_data))
+							get_log_cm().info("%s Card %d ATR %s" % (st, i, emv_data))
+							#Print ASCII, if data is available
+							if "No EMV Support" not in str(emv_data):
+								characters = emv_data.replace(' ', '')
+								print "%s Card %d ATR string %s" % (st, i, characters.decode('hex'))
+							if i == 1:
+								card_bay_open() #Plunger goes forward
+								print "%s Card %d Bay opened, Remove Card Quickly!!" % (st, i)
+								get_log_cm().info("%s Card %d Bay opened, Remove Card Quickly!!" % (st, i))
+						else:
+							print "%s Card %d Removed" % (st, i)
+							get_log_cm().info("%s Card %d Removed" % (st, i))
