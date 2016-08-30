@@ -81,7 +81,7 @@ def uart_self_test():
 		return False
 
 def await_boot_complete():
-	input = 'ls'
+	input = 'root'
 	get_ser().write(input.encode('ascii')+'\n')
 	time.sleep(3)
 	out = str(get_ser().readlines())
@@ -100,6 +100,9 @@ def await_boot_complete():
 		get_log_cm().info("Go Back to listening")
 		return "Pending"
 	elif "root@jibe" in out:
+		get_log_cm().info("Root Log Complete")
+		return "RootDone"
+	elif "#" in out:
 		get_log_cm().info("Root Log Complete")
 		return "RootDone"
 	elif "Password" in out:
