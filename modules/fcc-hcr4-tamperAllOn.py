@@ -12,7 +12,7 @@ from serial_cm import ser_Init, get_ser, uart_self_test, serial_close
 from smart_card import isCardPresent, getEnvData, read_smart_card
 from ping import find_ip_addr, can_addr_ping
 from sec_mon_hcr4 import read_tamper_count, read_rtc_count, set_tamper_trigger
-
+from cdc_cryptera import find_cdc_rsp_data
 
 ##################################################
 #Main Code Here
@@ -23,7 +23,7 @@ if __name__=='__main__':
 	##Overwrite Log location
 	my_path = '..\\fcc_log\\'
 	my_name = 'fcc_test'
-	tamper_flag = 15 	# 0-OFF, f-tamper 0,1,2,3 active, 3f-All Tampers and Latches (not this test) Active and triggered
+	tamper_flag = 63 	# 0-OFF, f-tamper 0,1,2,3 active, 3f-All Tampers and Latches (not this test) Active and triggered
 							# 1 - Tamper1 armed
 							# 2 - Tamper2 armed
 							# 3 - Tampers 1&2 armed
@@ -46,6 +46,7 @@ if __name__=='__main__':
 		smart_card_count 	= 0
 		tamper_count 	= 0
 		rtc_stamp 	= 0
+		cdc_count = 0
 		total_count 	= 0
 		MAX_COM_RETRY	= 5
 ################################
@@ -142,5 +143,10 @@ if __name__=='__main__':
 				get_log_cm().error("\t\t\tTAMPER DISABLED\n")
 
 			#TAMPER end:################################################################
+			#CRYPTERA POLLING###########################################################
+			if find_cdc_rsp_data() != -1:
+				cdc_count = cdc_count+1
+			get_log_cm().info( "CDC Count = \t\t\t%d of %d", cdc_count, total_count)
+			#CRYPTERA END    ###########################################################
 			get_log_cm().info("\t\t\t==============================\n")
 
