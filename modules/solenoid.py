@@ -92,17 +92,21 @@ if __name__=='__main__':
 	
 
 ##############INIT #################					
-		set_log_info(my_path, my_name)
+		set_log_info(my_path, my_name, 1)
 		ser_Init()
 		#card_bay_init()
 ##############INIT END##############		
 		get_log_cm().info('Start %s Test', my_name)
 		get_log_cm().info('Test :\n Solenoid')
+		card_bay_init()
 
 		while run:
 			#Total Test Cycles
 			#get_log_cm().info( "\n")
 			total_count+=1
+			pull_off()
 			get_log_cm().debug( "Total Test Cycles = %d", total_count)
-			time.sleep(1)
+			time.sleep(5)
+			pull_on()
+			get_log_cm().debug( "Total Test Cycles = %d", total_count)
 			
