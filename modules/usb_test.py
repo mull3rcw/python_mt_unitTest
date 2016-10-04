@@ -8,10 +8,10 @@ from log_cm import set_log_info, set_log_level, get_log_cm
 dev = usb.core.find(find_all=True)
 # loop through devices, printing vendor and product ids in decimal and hex
 for cfg in dev:
-	sys.stdout.write('Decimal VendorID=' + str(cfg.idVendor) + ' & ProductID=' + str(cfg.idProduct) + '\n')
+	#sys.stdout.write('Decimal VendorID=' + str(cfg.idVendor) + ' & ProductID=' + str(cfg.idProduct) + '\n')
 	sys.stdout.write('Hexadecimal VendorID=' + hex(cfg.idVendor) + ' & ProductID=' + hex(cfg.idProduct) + '\n\n')
-  
- 
+
+
 prev_dev = "Not Init"
 known_val = "Hexadecimal VendorID=0x525 & ProductID=0xa4ac"
 
@@ -23,8 +23,8 @@ while (1):
 	time.sleep(1)
 	if prev_dev == "Not Init":
 		for cfg in dev:
-			sys.stdout.write("idVendor %s\n\n" % cfg.idVendor)
-			if cfg.idVendor == 0x0525:
+			sys.stdout.write("idVendor %s\n\n" % hex(cfg.idVendor))
+			if cfg.idVendor == 0x0801:
 				prev_dev = cfg
 				usb_count += 1
 	elif prev_dev != "Not Init":
@@ -38,9 +38,8 @@ while (1):
 				sys.stdout.write("cfg VENDOR %s\n" % cfg.idVendor)
 				if prev_dev.idVendor == cfg.idVendor and prev_dev.idProduct == cfg.idProduct:
 					usb_count += 1
-					
+
 	sys.stdout.write("count %d\n\n" % usb_count)
 
-  
-  
-  
+
+
