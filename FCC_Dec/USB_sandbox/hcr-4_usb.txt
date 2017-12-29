@@ -1,0 +1,48 @@
+DEVICE ID 0525:a4ac on Bus 000 Address 001 =================
+ bLength                :   0x12 (18 bytes)
+ bDescriptorType        :    0x1 Device
+ bcdUSB                 :  0x200 USB 2.0
+ bDeviceClass           :    0x0 Specified at interface
+ bDeviceSubClass        :    0x0
+ bDeviceProtocol        :    0x0
+ bMaxPacketSize0        :   0x40 (64 bytes)
+ idVendor               : 0x0525
+ idProduct              : 0xa4ac
+ bcdDevice              :  0x310 Device 3.1
+ iManufacturer          :    0x1 Linux 3.10.90.0-pci-3.0-maxim-jibe-eek-b2-00148-g7e434b8-dirty with maximasp-udc
+ iProduct               :    0x2 HID Gadget
+ iSerialNumber          :    0x0 
+ bNumConfigurations     :    0x1
+  CONFIGURATION 1: 2 mA ====================================
+   bLength              :    0x9 (9 bytes)
+   bDescriptorType      :    0x2 Configuration
+   wTotalLength         :   0x29 (41 bytes)
+   bNumInterfaces       :    0x1
+   bConfigurationValue  :    0x1
+   iConfiguration       :    0x0 
+   bmAttributes         :   0xc0 Self Powered
+   bMaxPower            :    0x1 (2 mA)
+    INTERFACE 0: Human Interface Device ====================
+     bLength            :    0x9 (9 bytes)
+     bDescriptorType    :    0x4 Interface
+     bInterfaceNumber   :    0x0
+     bAlternateSetting  :    0x0
+     bNumEndpoints      :    0x2
+     bInterfaceClass    :    0x3 Human Interface Device
+     bInterfaceSubClass :    0x0
+     bInterfaceProtocol :    0x1
+     iInterface         :    0x4 HID Interface
+      ENDPOINT 0x81: Interrupt IN ==========================
+       bLength          :    0x7 (7 bytes)
+       bDescriptorType  :    0x5 Endpoint
+       bEndpointAddress :   0x81 IN
+       bmAttributes     :    0x3 Interrupt
+       wMaxPacketSize   :    0x8 (8 bytes)
+       bInterval        :    0xa
+      ENDPOINT 0x2: Interrupt OUT ==========================
+       bLength          :    0x7 (7 bytes)
+       bDescriptorType  :    0x5 Endpoint
+       bEndpointAddress :    0x2 OUT
+       bmAttributes     :    0x3 Interrupt
+       wMaxPacketSize   :    0x8 (8 bytes)
+       bInterval        :    0xa
