@@ -50,8 +50,15 @@ def SC_readData(data):
 	#print [hex (l) for l in data]
 	if data[12] != 0:
 		print "SC USB FAILED!!!"
+		print data[12]
+		print hex(data[13])
 		status = 1
 		return None
+	if data[13] != 0xC4:
+		print hex(data[13])
+		status = 2
+		return None
+
 	print "SC USB PASSED!!!"
 	status = 0
 	return None

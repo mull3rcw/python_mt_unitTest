@@ -31,7 +31,7 @@ def eth_test(app, cmd):
 	#if dynaproPort == "":
 	dynaproPort = str(5000)
 
-	print "Attempting to connect to DynaPro at " + dynaproIP + " on " + dynaproPort
+#	print "Attempting to connect to DynaPro at " + dynaproIP + " on " + dynaproPort
 
 	client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	client_socket.connect((dynaproIP, int(dynaproPort)))
@@ -50,17 +50,17 @@ def eth_test(app, cmd):
 #		if counter > 500:
 #			break
 
-	print "-> " + binascii.hexlify(buffer)
+#	print "-> " + binascii.hexlify(buffer)
 	client_socket.send(buffer)
 	recvData = client_socket.recv(10000)
 	
-	print len(recvData)
+#	print len(recvData)
 
 	#data_list = map(ord, recvData)
 	#print data_list
 	
 	data_list = struct.unpack(str(len(recvData))+'B', recvData)
-	print data_list
+#	print data_list
 
 	if data_list[11] != 0:
 		print "ETHER FAILED!!!"
@@ -69,7 +69,7 @@ def eth_test(app, cmd):
 	status = 0
 
 	
-	print "<- " + binascii.hexlify(recvData)
+#	print "<- " + binascii.hexlify(recvData)
 
 #		print "-> " + binascii.hexlify(sendCommand_icc_read)
 #		client_socket.send(sendCommand_icc_read)
