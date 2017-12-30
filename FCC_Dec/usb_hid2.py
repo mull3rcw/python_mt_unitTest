@@ -5,7 +5,10 @@ PId = 0x001B
  
 #def sample_handler(data):
  #   print("Raw data: {0}".format(data))
- 
+def readData(data):
+	print "Over here"
+	print(data)
+	return None
  
  
  
