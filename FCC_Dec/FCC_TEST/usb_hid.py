@@ -6,65 +6,71 @@ import usb.util
 import pywinusb.hid as hid
 import time
 
-# find our device
-# dev = usb.core.find(idVendor=0xfffe, idProduct=0x0001)
-
-status = -1
+status = {'tamper_ok':-1, 'usb_ok':-1}
 
 def TM_readData(data):
 	global status
-#	print "RX->: "
-#	print [hex (l) for l in data]
+	if data == []:
+		print "USB empty!!!"
+		status = {'tamper_ok':0, 'usb_ok':-1}
+		return None
+		
 	if data[12] != 0:
 		print "USB FAILED!!!"
-		status = 1
+		status = {'tamper_ok':0, 'usb_ok':0}
 		return None
 
 	if data[15] != 0x3F:
 		print "USB FAILED (tamper not ON)!!!" + data[15]
-		status = 1
+		status = {'tamper_ok':0, 'usb_ok':1}
 		return None
 
 	if data[16] != 0xF:
 		print "USB FAILED (tamper not ON)!!!" + data[16]
-		status = 1
+		status = {'tamper_ok':0, 'usb_ok':1}
 		return None
 
 	if data[17] != 0x0:
 		print "USB FAILED EXT!!!" + data[17]
-		status = 1
+		status = {'tamper_ok':0, 'usb_ok':1}
 		return None
 
 	if data[18] != 0x0:
 		print "USB FAILED INT!!!" + data[18]
-		status = 1
+		status = {'tamper_ok':0, 'usb_ok':1}
 		return None
 		
-	print "TM_USB PASSED!!!"
-	status = 0
+	#print "TM_USB PASSED!!!"
+	status = {'tamper_ok':1, 'usb_ok':1}
 	return None
 
 def SC_readData(data):
 	global status
-	#print "RX->: "
-	#print [hex (l) for l in data]
+	if data == []:
+		status = {'scard_ok':0, 'usb_ok':-1}
+		return None
+
 	if data[12] != 0:
 		print "SC USB FAILED!!!"
 		print data[12]
 		print hex(data[13])
-		status = 1
+		status = {'scard_ok':0, 'usb_ok':1}
 		return None
+
 	if data[13] != 0xC4:
 		print hex(data[13])
 		status = 2
+		status = {'scard_ok':0, 'usb_ok':1}
 		return None
 
-	print "SC USB PASSED!!!"
-	status = 0
+	#print "SC USB PASSED!!!"
+	status = {'scard_ok':1, 'usb_ok':1}
 	return None
 
 
+
 def usb_hid_test(app, cmd):
+	global status
 	cvendor_id=0x0801
 	cproduct_id=0x001B
 	#print app
@@ -93,20 +99,7 @@ def usb_hid_test(app, cmd):
 	
 	report.set_raw_data(buffer)
 	report.send()
-
 	time.sleep(1)
-
-
-	#TAMPER
-	
-#	buffer = bytearray.fromhex(u' 05 C0 01 01 C1 01 01 C2 01 3F 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00')
-#	buffer[0] = 05
-#	report.set_raw_data(buffer)
-#	report.send()
-
-#	time.sleep(1)
-	
-	
 	
 	dev.close()
 	return status

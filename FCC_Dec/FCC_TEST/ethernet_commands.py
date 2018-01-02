@@ -5,6 +5,7 @@ import binascii
 import struct
 
 
+
 #convert string to hex
 def toHex(s):
 	lst = []
@@ -21,61 +22,59 @@ def toStr(s):
 
 
 def eth_test(app, cmd):
-	status = -1
+	status = {'scard_ok':-1, 'eth_ok':-1}
 	#print 'Please enter IP address: '
-	#dynaproIP = raw_input('IP address [10.57.10.133]: ')
-	#if dynaproIP == "":
-	dynaproIP = "10.57.22.123"
+	dynaproIP = "10.57.22.103"
 
-	#dynaproPort = raw_input('Port [26]: ')
-	#if dynaproPort == "":
 	dynaproPort = str(5000)
-
-#	print "Attempting to connect to DynaPro at " + dynaproIP + " on " + dynaproPort
 
 	client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	client_socket.connect((dynaproIP, int(dynaproPort)))
 
-
 	buffer = bytearray.fromhex(u'C0 01 01 C1 01 01 C2 01 3F')
-	#sendCommand_icc_read = bytearray.fromhex(u'C0 01 01 C1 01 06 C2 01 01')
-
-	
 	buffer[5] = app
 	buffer[8] = cmd
-	
-#	counter = 0
-#	while (1):
-#		counter += 1
-#		if counter > 500:
-#			break
 
-#	print "-> " + binascii.hexlify(buffer)
 	client_socket.send(buffer)
 	recvData = client_socket.recv(10000)
+
+	data = struct.unpack(str(len(recvData))+'B', recvData)
 	
-#	print len(recvData)
-
-	#data_list = map(ord, recvData)
-	#print data_list
 	
-	data_list = struct.unpack(str(len(recvData))+'B', recvData)
-#	print data_list
-
-	if data_list[11] != 0:
-		print "ETHER FAILED!!!"
-		status = 1
-	print "ETH PASSED!!!"
-	status = 0
-
-	
-#	print "<- " + binascii.hexlify(recvData)
-
-#		print "-> " + binascii.hexlify(sendCommand_icc_read)
-#		client_socket.send(sendCommand_icc_read)
-#		recvData = client_socket.recv(10000)
-#		print "<- " + binascii.hexlify(recvData)
-#		print counter
+	#ICC STATUS
+	if app == 6:
+		if data == []:
+			status = {'scard_ok':0, 'eth_ok':-1}
+		elif data[11] != 0:
+			print "SC ETH FAILED!!!"
+			print data[11]
+			print hex(data[12])
+			status = {'scard_ok':0, 'eth_ok':1}
+		else:
+			#print "SC ETH PASSED!!!"
+			status = {'scard_ok':1, 'eth_ok':1}
+	else:
+		#TAMPER
+		if data == []:
+			status = {'tamper_ok':0, 'eth_ok':-1}
+		elif data[11] != 0:
+			print "USB FAILED!!!"
+			status = {'tamper_ok':0, 'usb_ok':0}
+		elif data[14] != 0x3F:
+			print "USB FAILED (tamper not ON)!!!" + data[15]
+			status = {'tamper_ok':0, 'usb_ok':1}
+		elif data[15] != 0xF:
+			print "USB FAILED (tamper not ON)!!!" + data[16]
+			status = {'tamper_ok':0, 'usb_ok':1}
+		elif data[16] != 0x0:
+			print "USB FAILED EXT!!!" + data[17]
+			status = {'tamper_ok':0, 'usb_ok':1}
+		elif data[17] != 0x0:
+			print "USB FAILED INT!!!" + data[18]
+			status = {'tamper_ok':0, 'usb_ok':1}
+		else:
+			#print "TM ETH PASSED!!!"
+			status = {'tamper_ok':1, 'eth_ok':1}
 		
 	time.sleep(1)
 	client_socket.close()
