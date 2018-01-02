@@ -16,6 +16,8 @@ def toHex(s):
 		lst.append(hv)
 	return reduce(lambda x,y:x+y, lst)
 
+
+	
 #convert hex repr to string
 def toStr(s):
 	return s and chr(int(s[:2], base=16)) + toStr(s[2:]) or ''
@@ -24,12 +26,19 @@ def toStr(s):
 def eth_test(app, cmd):
 	status = {'scard_ok':-1, 'eth_ok':-1}
 	#print 'Please enter IP address: '
-	dynaproIP = "10.57.22.103"
+	dynaproIP = "192.168.56.4"
+	#dynaproIP = "10.57.22.103"
 
 	dynaproPort = str(5000)
 
-	client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	client_socket.connect((dynaproIP, int(dynaproPort)))
+	try:
+		client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		client_socket.connect((dynaproIP, int(dynaproPort)))
+		print "Socket obtained"
+	except socket.error as err:
+		print "there was an error resolving the host"
+		status = {'scard_ok':-1, 'eth_ok':-1}
+		return status
 
 	buffer = bytearray.fromhex(u'C0 01 01 C1 01 01 C2 01 3F')
 	buffer[5] = app
@@ -59,19 +68,19 @@ def eth_test(app, cmd):
 			status = {'tamper_ok':0, 'eth_ok':-1}
 		elif data[11] != 0:
 			print "USB FAILED!!!"
-			status = {'tamper_ok':0, 'usb_ok':0}
+			status = {'tamper_ok':0, 'eth_ok':0}
 		elif data[14] != 0x3F:
 			print "USB FAILED (tamper not ON)!!!" + data[15]
-			status = {'tamper_ok':0, 'usb_ok':1}
+			status = {'tamper_ok':0, 'eth_ok':1}
 		elif data[15] != 0xF:
 			print "USB FAILED (tamper not ON)!!!" + data[16]
-			status = {'tamper_ok':0, 'usb_ok':1}
+			status = {'tamper_ok':0, 'eth_ok':1}
 		elif data[16] != 0x0:
 			print "USB FAILED EXT!!!" + data[17]
-			status = {'tamper_ok':0, 'usb_ok':1}
+			status = {'tamper_ok':0, 'eth_ok':1}
 		elif data[17] != 0x0:
 			print "USB FAILED INT!!!" + data[18]
-			status = {'tamper_ok':0, 'usb_ok':1}
+			status = {'tamper_ok':0, 'eth_ok':1}
 		else:
 			#print "TM ETH PASSED!!!"
 			status = {'tamper_ok':1, 'eth_ok':1}

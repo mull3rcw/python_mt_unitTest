@@ -14,7 +14,7 @@ def TM_readData(data):
 		print "USB empty!!!"
 		status = {'tamper_ok':0, 'usb_ok':-1}
 		return None
-		
+
 	if data[12] != 0:
 		print "USB FAILED!!!"
 		status = {'tamper_ok':0, 'usb_ok':0}
