@@ -42,6 +42,7 @@ def mHex(s):
 	return " ".join(hex(ord(n)) for n in text)
 
 def ser_test(app, cmd):
+	#Compares need to be against strings, and lower case apparently
 	status = {'scard_ok':-1, 'ser_ok':-1}
 	#print 'Please enter IP address: '
 	
@@ -53,44 +54,41 @@ def ser_test(app, cmd):
 	except SerialException:
 		return status
 
-	if ser.isOpen():
-		print(ser.name + ' is open...')
-		
+	if not ser.isOpen():
+		print(ser.name + ' is NOT open...')
 
 	buffer = bytearray.fromhex(u'C0 01 01 C1 01 01 C2 01 3F')
 	buffer[5] = app
 	buffer[8] = cmd
 
-	ser.write(buffer + '\r\n')
-	#ser.write(buffer)
-	print "write->"
-	print binascii.hexlify(buffer)
-	#print buffer
+		
+	#ser.write(binascii.hexlify(buffer) + '\r\n')
+	ser.write(binascii.hexlify(buffer) + '\n')
+	
+	
+	#print "write->"
+	#print binascii.hexlify(buffer)
+	
 	if app == 6:
 		out  = ser.read(24) #how many bytes expect to read
 	else:
-		out  = ser.read(30) #how many bytes expect to read
+		out  = ser.read(36) #how many bytes expect to read
 	ser.close()
-	print "<-read"
+	#print "<-read"
 	#print(out)   ##for outputing ascii characters
-	print "toHex2->"
-	print toHex2(out)
-
 	time.sleep(1)
 	
 	#ICC STATUS
 	data = toHex2(out)
-	print data
+	#print data
 	if app == 6:
-		print "SC"
+		#print "SC"
 		if data == []:
 			status = {'scard_ok':0, 'ser_ok':-1}
 		elif data[11] != '0x0':
-			print "SC SER FAILED!!"
-			print "data[11] is ->"
-			print data[11]
-			for i in range(12):
-				print data[i]
+			print "SC SER FAILED!!! " + str(int(data[11], 16))
+			#for i in range(12):
+			#	print data[i]
 			
 			status = {'scard_ok':0, 'ser_ok':1}
 		else:
@@ -98,23 +96,23 @@ def ser_test(app, cmd):
 			status = {'scard_ok':1, 'ser_ok':1}
 	else:
 		#TAMPER
-		print "Tamper"
+		#print "Tamper"
 		if data == []:
 			status = {'tamper_ok':0, 'ser_ok':-1}
-		elif data[11] != 0:
+		elif data[11] != '0x0':
 			print "SER FAILED!!!"
 			status = {'tamper_ok':0, 'ser_ok':0}
-		elif data[14] != 0x3F:
+		elif data[14] != '0x3f':
+			print "SER FAILED (tamper not ON)!" + data[14]
+			status = {'tamper_ok':0, 'ser_ok':1}
+		elif data[15] != '0xf':
 			print "SER FAILED (tamper not ON)!!!" + data[15]
 			status = {'tamper_ok':0, 'ser_ok':1}
-		elif data[15] != 0xF:
-			print "SER FAILED (tamper not ON)!!!" + data[16]
+		elif data[16] != '0x0':
+			print "SER FAILED EXT!!!" + data[16]
 			status = {'tamper_ok':0, 'ser_ok':1}
-		elif data[16] != 0x0:
-			print "SER FAILED EXT!!!" + data[17]
-			status = {'tamper_ok':0, 'ser_ok':1}
-		elif data[17] != 0x0:
-			print "SER FAILED INT!!!" + data[18]
+		elif data[17] != '0x0':
+			print "SER FAILED INT!!!" + data[17]
 			status = {'tamper_ok':0, 'ser_ok':1}
 		else:
 			#print "TM SER PASSED!!!"
@@ -124,7 +122,7 @@ def ser_test(app, cmd):
 	return status
 
 if __name__=='__main__':
-	print "ret is: " + str(ser_test(6,1))
-	#print "ret is: " + str(ser_test(1,0x3F))
+	#print "ret is: " + str(ser_test(6,1))
+	print "ret is: " + str(ser_test(1,0x3F))
 
 

@@ -4,7 +4,8 @@ import time
 import binascii
 import struct
 
-
+#dynaproIP = "192.168.56.4"
+dynaproIP = "10.57.22.103"
 
 #convert string to hex
 def toHex(s):
@@ -15,28 +16,26 @@ def toHex(s):
 			hv = '0'+hv
 		lst.append(hv)
 	return reduce(lambda x,y:x+y, lst)
-
-
 	
 #convert hex repr to string
 def toStr(s):
 	return s and chr(int(s[:2], base=16)) + toStr(s[2:]) or ''
 
-
 def eth_test(app, cmd):
 	status = {'scard_ok':-1, 'eth_ok':-1}
 	#print 'Please enter IP address: '
-	dynaproIP = "192.168.56.4"
+	#global dynaproIP
 	#dynaproIP = "10.57.22.103"
-
+	dynaproIP = "10.57.22.103"
 	dynaproPort = str(5000)
 
 	try:
 		client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		client_socket.settimeout(3.0)
 		client_socket.connect((dynaproIP, int(dynaproPort)))
-		print "Socket obtained"
+		#print "Socket obtained"
 	except socket.error as err:
-		print "there was an error resolving the host"
+		print "Ethernet: Failure, error resolving the host"
 		status = {'scard_ok':-1, 'eth_ok':-1}
 		return status
 
@@ -49,15 +48,13 @@ def eth_test(app, cmd):
 
 	data = struct.unpack(str(len(recvData))+'B', recvData)
 	
-	
 	#ICC STATUS
 	if app == 6:
+		#print data
 		if data == []:
 			status = {'scard_ok':0, 'eth_ok':-1}
 		elif data[11] != 0:
-			print "SC ETH FAILED!!!"
-			print data[11]
-			print hex(data[12])
+			print "SC ETH FAILED!!! " + str(data[11])
 			status = {'scard_ok':0, 'eth_ok':1}
 		else:
 			#print "SC ETH PASSED!!!"

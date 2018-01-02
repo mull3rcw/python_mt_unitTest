@@ -51,9 +51,7 @@ def SC_readData(data):
 		return None
 
 	if data[12] != 0:
-		print "SC USB FAILED!!!"
-		print data[12]
-		print hex(data[13])
+		print "SC USB FAILED!!! " + str(data[12])
 		status = {'scard_ok':0, 'usb_ok':1}
 		return None
 
@@ -76,7 +74,13 @@ def usb_hid_test(app, cmd):
 	#print app
 	#print cmd
 	#dev = usb.core.find(idVendor=cvendor_id, idProduct=cproduct_id)
-	dev = hid.HidDeviceFilter(vendor_id = 0x0801, product_id = 0x001B).get_devices()[0]
+	try:
+		dev = hid.HidDeviceFilter(vendor_id = 0x0801, product_id = 0x001B).get_devices()[0]
+	except:
+		print "USB Failure to detect"
+		status = {'scard_ok':0, 'usb_ok':-1}
+		return status
+		
 	# was it found?
 	if dev is None:
 		raise ValueError('Device not found')
