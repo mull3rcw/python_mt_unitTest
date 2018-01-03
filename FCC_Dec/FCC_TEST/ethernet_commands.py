@@ -3,9 +3,10 @@ import array
 import time
 import binascii
 import struct
+from logging_fcc import get_log
 
-#dynaproIP = "192.168.56.4"
-dynaproIP = "10.57.22.103"
+dynaproIP = "192.168.56.4"
+#dynaproIP = "10.57.22.103"
 
 #convert string to hex
 def toHex(s):
@@ -24,10 +25,11 @@ def toStr(s):
 def eth_test(app, cmd):
 	status = {'scard_ok':-1, 'eth_ok':-1}
 	#print 'Please enter IP address: '
-	#global dynaproIP
+	global dynaproIP
 	#dynaproIP = "10.57.22.103"
-	dynaproIP = "10.57.22.103"
+	#dynaproIP = "10.57.22.103"
 	dynaproPort = str(5000)
+	log = get_log()
 
 	try:
 		client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -35,7 +37,7 @@ def eth_test(app, cmd):
 		client_socket.connect((dynaproIP, int(dynaproPort)))
 		#print "Socket obtained"
 	except socket.error as err:
-		print "Ethernet: Failure, error resolving the host"
+		log.info( "Ethernet: Failure, error resolving the host")
 		status = {'scard_ok':-1, 'eth_ok':-1}
 		return status
 
@@ -50,36 +52,36 @@ def eth_test(app, cmd):
 	
 	#ICC STATUS
 	if app == 6:
-		#print data
+		#log.info( data)
 		if data == []:
 			status = {'scard_ok':0, 'eth_ok':-1}
 		elif data[11] != 0:
-			print "SC ETH FAILED!!! " + str(data[11])
+			log.info( "SC ETH FAILED!!! " + str(data[11]))
 			status = {'scard_ok':0, 'eth_ok':1}
 		else:
-			#print "SC ETH PASSED!!!"
+			#log.info( "SC ETH PASSED!!!"
 			status = {'scard_ok':1, 'eth_ok':1}
 	else:
 		#TAMPER
 		if data == []:
 			status = {'tamper_ok':0, 'eth_ok':-1}
 		elif data[11] != 0:
-			print "USB FAILED!!!"
+			log.info( "USB FAILED!!!")
 			status = {'tamper_ok':0, 'eth_ok':0}
 		elif data[14] != 0x3F:
-			print "USB FAILED (tamper not ON)!!!" + data[15]
+			log.info( "USB FAILED (tamper not ON)!!!" + data[15])
 			status = {'tamper_ok':0, 'eth_ok':1}
 		elif data[15] != 0xF:
-			print "USB FAILED (tamper not ON)!!!" + data[16]
+			log.info( "USB FAILED (tamper not ON)!!!" + data[16])
 			status = {'tamper_ok':0, 'eth_ok':1}
 		elif data[16] != 0x0:
-			print "USB FAILED EXT!!!" + data[17]
+			log.info( "USB FAILED EXT!!!" + data[17])
 			status = {'tamper_ok':0, 'eth_ok':1}
 		elif data[17] != 0x0:
-			print "USB FAILED INT!!!" + data[18]
+			log.info( "USB FAILED INT!!!" + data[18])
 			status = {'tamper_ok':0, 'eth_ok':1}
 		else:
-			#print "TM ETH PASSED!!!"
+			#log.info( "TM ETH PASSED!!!")
 			status = {'tamper_ok':1, 'eth_ok':1}
 		
 	time.sleep(1)

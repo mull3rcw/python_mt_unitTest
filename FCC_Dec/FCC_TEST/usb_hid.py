@@ -5,42 +5,43 @@ import usb.core
 import usb.util
 import pywinusb.hid as hid
 import time
+from logging_fcc import log_date, get_log
 
 status = {'tamper_ok':-1, 'usb_ok':-1}
 
 def TM_readData(data):
 	global status
 	if data == []:
-		print "USB empty!!!"
+		log.info( "USB empty!!!")
 		status = {'tamper_ok':0, 'usb_ok':-1}
 		return None
 
 	if data[12] != 0:
-		print "USB FAILED!!!"
+		log.info( "USB FAILED!!!")
 		status = {'tamper_ok':0, 'usb_ok':0}
 		return None
 
 	if data[15] != 0x3F:
-		print "USB FAILED (tamper not ON)!!!" + data[15]
+		log.info( "USB FAILED (tamper not ON)!!!" + data[15])
 		status = {'tamper_ok':0, 'usb_ok':1}
 		return None
 
 	if data[16] != 0xF:
-		print "USB FAILED (tamper not ON)!!!" + data[16]
+		log.info( "USB FAILED (tamper not ON)!!!" + data[16])
 		status = {'tamper_ok':0, 'usb_ok':1}
 		return None
 
 	if data[17] != 0x0:
-		print "USB FAILED EXT!!!" + data[17]
+		log.info( "USB FAILED EXT!!!" + data[17])
 		status = {'tamper_ok':0, 'usb_ok':1}
 		return None
 
 	if data[18] != 0x0:
-		print "USB FAILED INT!!!" + data[18]
+		log.info( "USB FAILED INT!!!" + data[18])
 		status = {'tamper_ok':0, 'usb_ok':1}
 		return None
 		
-	#print "TM_USB PASSED!!!"
+	#log.info( "TM_USB PASSED!!!")
 	status = {'tamper_ok':1, 'usb_ok':1}
 	return None
 
@@ -51,17 +52,17 @@ def SC_readData(data):
 		return None
 
 	if data[12] != 0:
-		print "SC USB FAILED!!! " + str(data[12])
+		log.info( "SC USB FAILED!!! " + str(data[12]))
 		status = {'scard_ok':0, 'usb_ok':1}
 		return None
 
 	if data[13] != 0xC4:
-		print hex(data[13])
+		log.info( hex(data[13]))
 		status = 2
 		status = {'scard_ok':0, 'usb_ok':1}
 		return None
 
-	#print "SC USB PASSED!!!"
+	#log.info( "SC USB PASSED!!!")
 	status = {'scard_ok':1, 'usb_ok':1}
 	return None
 
@@ -71,13 +72,14 @@ def usb_hid_test(app, cmd):
 	global status
 	cvendor_id=0x0801
 	cproduct_id=0x001B
+	log = get_log()
 	#print app
 	#print cmd
 	#dev = usb.core.find(idVendor=cvendor_id, idProduct=cproduct_id)
 	try:
 		dev = hid.HidDeviceFilter(vendor_id = 0x0801, product_id = 0x001B).get_devices()[0]
 	except:
-		print "USB Failure to detect"
+		log.info( "USB Failure to detect")
 		status = {'scard_ok':0, 'usb_ok':-1}
 		return status
 		

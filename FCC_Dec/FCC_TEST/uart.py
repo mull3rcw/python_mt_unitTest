@@ -14,39 +14,18 @@ import binascii
 import struct
 from serial import SerialException
 
-
-#convert string to hex
-def toHex(s):
-	lst = []
-	for ch in s:
-		hv = hex(ord(ch)).replace('0x', ' ')
-		if len(hv) == 1:
-			hv = '0'+hv
-		lst.append(hv)
-	return reduce(lambda x,y:x+y, lst)
-
 #convert string to hex
 def toHex2(text):
 	s=binascii.unhexlify(text)
 	#print s
 	return [hex(ord(x)) for x in s]	
 
-	
-	
-#convert hex repr to string
-def toStr(s):
-	return s and chr(int(s[:2], base=16)) + toStr(s[2:]) or ''
-	
-def mHex(s):
-	
-	return " ".join(hex(ord(n)) for n in text)
-
 def ser_test(app, cmd):
 	#Compares need to be against strings, and lower case apparently
 	status = {'scard_ok':-1, 'ser_ok':-1}
 	#print 'Please enter IP address: '
 	
-	port = "COM13"   #Windows com port format 
+	port = "COM13"   #Windows com port format was 13
 	baud = 9600		#make sure it's the same for both side
 
 	try:
@@ -60,22 +39,15 @@ def ser_test(app, cmd):
 	buffer = bytearray.fromhex(u'C0 01 01 C1 01 01 C2 01 3F')
 	buffer[5] = app
 	buffer[8] = cmd
-
 		
 	#ser.write(binascii.hexlify(buffer) + '\r\n')
 	ser.write(binascii.hexlify(buffer) + '\n')
-	
-	
-	#print "write->"
-	#print binascii.hexlify(buffer)
 	
 	if app == 6:
 		out  = ser.read(24) #how many bytes expect to read
 	else:
 		out  = ser.read(36) #how many bytes expect to read
 	ser.close()
-	#print "<-read"
-	#print(out)   ##for outputing ascii characters
 	time.sleep(1)
 	
 	#ICC STATUS
@@ -89,7 +61,6 @@ def ser_test(app, cmd):
 			print "SC SER FAILED!!! " + str(int(data[11], 16))
 			#for i in range(12):
 			#	print data[i]
-			
 			status = {'scard_ok':0, 'ser_ok':1}
 		else:
 			#print "SC SER PASSED!!!"
