@@ -1,11 +1,18 @@
 #Use this one
 import sys, time, datetime
 #logging
-from logging_fcc import set_log_info, log_date, get_log
+from logging_fcc import set_log_info, log_date, get_log, get_mode
 from ethernet_commands import eth_test
-from usb_hid import usb_hid_test
+from usb_hid import usb_hid_test, set_ip
 #from serial_fcc import ser_Init, get_ser, log, set_log_info, uart_self_test
 from uart import ser_test
+
+###############  USER DEFINED START ###############
+#mode = "laptop"
+mode = "desktop"
+iterate = 100
+
+###############  USER DEFINED END #################
 
 #Logging setup
 myts = time.time()	
@@ -15,7 +22,6 @@ my_path = 'fcc_log\\'
 my_name = 'fcc_test'
 my_file = my_path+my_name+str(myst)+'.log'
 
-iterate = 100
 
 usb_pass = 0
 usb_fail = 0
@@ -28,6 +34,7 @@ tm_fail = 0
 sc_pass = 0
 sc_fail = 0
 test_count = 0
+
 
 def run_fcc():
 	global test_count
@@ -126,20 +133,46 @@ def run_fcc():
 	#print ("ser interface\t\t" + str(ser_pass) + "\t\t" + str(ser_fail) + "\n")
 	#print ("Tamper\t\t" + str(tm_pass) + "\t\t" + str(tm_fail) + "\n")
 	#print ("SmartCard\t\t" + str(sc_pass) + "\t\t" + str(sc_fail) + "\n")
+
+
+#convert hex repr to string
+def toStr(s):
+	return s and chr(int(s[:2], base=10)) + toStr(s[2:]) or ''
+	#return s and chr(int(s[:2], 16)) + toStr(s[2:]) or ''
+
+def exists(it):
+    return (it is not 0)
 	
+def read_ip_address():
+	ip_raw_ret = usb_hid_test(0,0x18)
+	#Strip the ending 0
+	raw = filter(exists, ip_raw_ret)
+	hex_dump = ''.join(map(str,(raw)))
+	raw = toStr(hex_dump)
+	#print raw
+	return str(raw) #toStr(hex_dump)
+
+
 if __name__=='__main__':
-	log = set_log_info(my_path, my_name)
+	log = set_log_info(my_path, my_name, mode)
+	log.info("###########################\n")
+	my_ip = read_ip_address()
+	set_ip(my_ip)
+	log.info("IP Address: " + my_ip)
+	log.info("Configuration: " + get_mode())
+	
 	for arg in sys.argv[1:]:
 		if not arg:
 			log.info("no arg")
 			iterate = 100
 		else:
-			print("get arg")
 			iterate = int(sys.argv[1])
-			for arg in sys.argv[1:]:
-				print(arg)
-
+			#for arg in sys.argv[1:]:
+			#	print(arg)
+			
 	
-	log.info(iterate)
+	log.info("Running " + str(iterate) + " test cycles")
+	log.info("\n###########################\n")
+
 	for i in range(iterate):
 		run_fcc()

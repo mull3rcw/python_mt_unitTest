@@ -13,7 +13,7 @@ import serial, time
 import binascii
 import struct
 from serial import SerialException
-from logging_fcc import log_date, get_log
+from logging_fcc import log_date, get_log, get_mode
 
 #convert string to hex
 def toHex2(text):
@@ -26,8 +26,12 @@ def ser_test(app, cmd):
 	status = {'scard_ok':-1, 'ser_ok':-1}
 	#print 'Please enter IP address: '
 	log = get_log()
-	
-	port = "COM1"   #Windows com port format was 13
+
+	if get_mode() == "laptop":
+		port = "COM1"   #Windows com port format was 13
+	else:
+		port = "COM13"   #Windows com port format was 13
+
 	baud = 9600		#make sure it's the same for both side
 
 	try:

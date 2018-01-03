@@ -6,6 +6,7 @@ import time, datetime, logging, os
 path = '..\log\\'
 brk = '\\'
 log_name = 'check_card_log'
+my_mode = "laptop"
 
 ##################################################
 # Get timestamp of Python call:
@@ -53,7 +54,8 @@ def set_log_path(new, rootLogger):
 	
 	return fileHandler
 
-def set_log_info(path, name):
+def set_log_info(path, name, mode):
+	set_mode(mode)
 	print "Log Path : "+ path
 	if not os.path.exists(path):
 		os.mkdir(path)
@@ -73,6 +75,15 @@ def get_log():
 	global my_log
 	return my_log
 
+def set_mode(new):
+	global my_mode
+	my_mode = new
+
+def get_mode():
+	global my_mode
+	return my_mode
+
+	
 #def log_Init(my_path, my_name):
 #	return set_log_info(my_path, my_name)	
 

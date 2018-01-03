@@ -3,10 +3,8 @@ import array
 import time
 import binascii
 import struct
-from logging_fcc import log_date, get_log
-
-dynaproIP = "192.168.56.4"
-#dynaproIP = "10.57.22.103"
+from logging_fcc import log_date, get_log, get_mode
+from usb_hid import get_ip
 
 #convert string to hex
 def toHex(s):
@@ -24,10 +22,11 @@ def toStr(s):
 
 def eth_test(app, cmd):
 	status = {'scard_ok':-1, 'eth_ok':-1}
-	#print 'Please enter IP address: '
-	global dynaproIP
-	#dynaproIP = "10.57.22.103"
-	#dynaproIP = "10.57.22.103"
+	#if get_mode() == "laptop":
+	#	dynaproIP = "192.168.56.4"
+	#else:
+	#	dynaproIP = "10.57.22.118"
+	dynaproIP = str(get_ip())
 	dynaproPort = str(5000)
 	log = get_log()
 
@@ -37,8 +36,10 @@ def eth_test(app, cmd):
 		client_socket.connect((dynaproIP, int(dynaproPort)))
 		#print "Socket obtained"
 	except socket.error as err:
+		print dynaproIP
 		log.info(log_date(get_log()) + ' ETH Failure to resolve...')
 		status = {'scard_ok':-1, 'eth_ok':-1}
+		log.info(get_ip())
 		return status
 
 	buffer = bytearray.fromhex(u'C0 01 01 C1 01 01 C2 01 3F')

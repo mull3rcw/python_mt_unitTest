@@ -9,6 +9,7 @@ from logging_fcc import log_date, get_log
 
 status = {'tamper_ok':-1, 'usb_ok':-1}
 
+
 def TM_readData(data):
 	global status
 	log = get_log()
@@ -19,7 +20,7 @@ def TM_readData(data):
 
 	if data[12] != 0:
 		log.info( "USB FAILED!!!")
-		status = {'tamper_ok':0, 'usb_ok':0}
+		status = {'tamper_ok':0, 'usb_ok':-1}
 		return None
 
 	if data[15] != 0x3F:
@@ -68,6 +69,24 @@ def SC_readData(data):
 	status = {'scard_ok':1, 'usb_ok':1}
 	return None
 
+def set_ip(new):
+	global my_ip
+	my_ip = new
+
+def get_ip():
+	global my_ip
+	return my_ip	
+
+def NET_readData(data):
+	global status
+	if data == []:
+		status = {'network':-1, 'usb_ok':-1}
+		print "Failed NET"
+		return None
+	status = data[16:]
+	return None
+
+	
 def usb_hid_test(app, cmd):
 	global status
 	cvendor_id=0x0801
@@ -87,22 +106,27 @@ def usb_hid_test(app, cmd):
 	if dev is None:
 		raise ValueError('Device not found')
 
-	#hid.set_configuration()
 	dev.open()
-	
 	report = dev.find_feature_reports()[0]
 
 	#ICC STATUS
 	if app == 6:
 		dev.set_raw_data_handler(SC_readData)
-	else:
+	elif app == 1:
 		dev.set_raw_data_handler(TM_readData)	
+	else:
+		dev.set_raw_data_handler(NET_readData)
 
 	buffer = bytearray.fromhex(u' 05 C0 01 01 C1 01 06 C2 01 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00')
 	buffer[0] = 05
 	buffer[6] = app
 	buffer[9] = cmd
 	
+	if app == 0:
+		buffer[10] = 0xC4
+		buffer[11] = 0x01
+		buffer[12] = 0x01
+		
 	report.set_raw_data(buffer)
 	report.send()
 	time.sleep(1)
@@ -113,3 +137,4 @@ def usb_hid_test(app, cmd):
 if __name__=='__main__':
 	print "ret is: " + str(usb_hid_test(6,1))
 	print "ret is: " + str(usb_hid_test(1,0x3F))
+	#print "ret is: " + str(usb_hid_test(0,0x18))
