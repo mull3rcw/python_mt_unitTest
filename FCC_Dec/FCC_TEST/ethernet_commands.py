@@ -37,9 +37,8 @@ def eth_test(app, cmd):
 		#print "Socket obtained"
 	except socket.error as err:
 		print dynaproIP
-		log.info(log_date(get_log()) + ' ETH Failure to resolve...')
+		log.info(log_date(get_log()) + ' ETH Failure to resolve...' + str(dynaproIP))
 		status = {'scard_ok':-1, 'eth_ok':-1}
-		log.info(get_ip())
 		return status
 
 	buffer = bytearray.fromhex(u'C0 01 01 C1 01 01 C2 01 3F')

@@ -17,9 +17,12 @@ from logging_fcc import log_date, get_log, get_mode
 
 #convert string to hex
 def toHex2(text):
-	s=binascii.unhexlify(text)
-	#log.info( s )
-	return [hex(ord(x)) for x in s]	
+	if len(text) % 2 == 0:
+		s=binascii.unhexlify(text)
+		#log.info( s )
+		return [hex(ord(x)) for x in s]	
+	else:
+		return[]
 
 def ser_test(app, cmd):
 	#Compares need to be against strings, and lower case apparently
