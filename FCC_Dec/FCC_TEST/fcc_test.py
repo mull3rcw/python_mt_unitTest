@@ -43,7 +43,8 @@ def run_fcc():
 	global sc_pass
 	global sc_fail
 	ret = 0
-
+	log = get_log()
+	
 	#ser SC
 	ret = ser_test(6,1)
 	if ret['ser_ok'] != -1:
@@ -125,12 +126,9 @@ def run_fcc():
 	#print ("ser interface\t\t" + str(ser_pass) + "\t\t" + str(ser_fail) + "\n")
 	#print ("Tamper\t\t" + str(tm_pass) + "\t\t" + str(tm_fail) + "\n")
 	#print ("SmartCard\t\t" + str(sc_pass) + "\t\t" + str(sc_fail) + "\n")
-
 	
 if __name__=='__main__':
-
-	
-	#uart_self_test()
+	log = set_log_info(my_path, my_name)
 	for arg in sys.argv[1:]:
 		if not arg:
 			log.info("no arg")
@@ -141,7 +139,7 @@ if __name__=='__main__':
 			for arg in sys.argv[1:]:
 				print(arg)
 
-	log = set_log_info(my_path, my_name)
+	
 	log.info(iterate)
 	for i in range(iterate):
 		run_fcc()

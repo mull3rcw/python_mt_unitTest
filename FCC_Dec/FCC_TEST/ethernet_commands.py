@@ -3,7 +3,7 @@ import array
 import time
 import binascii
 import struct
-from logging_fcc import get_log
+from logging_fcc import log_date, get_log
 
 dynaproIP = "192.168.56.4"
 #dynaproIP = "10.57.22.103"
@@ -37,7 +37,7 @@ def eth_test(app, cmd):
 		client_socket.connect((dynaproIP, int(dynaproPort)))
 		#print "Socket obtained"
 	except socket.error as err:
-		log.info( "Ethernet: Failure, error resolving the host")
+		log.info(log_date(get_log()) + ' ETH Failure to resolve...')
 		status = {'scard_ok':-1, 'eth_ok':-1}
 		return status
 

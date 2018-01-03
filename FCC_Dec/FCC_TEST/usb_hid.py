@@ -11,6 +11,7 @@ status = {'tamper_ok':-1, 'usb_ok':-1}
 
 def TM_readData(data):
 	global status
+	log = get_log()
 	if data == []:
 		log.info( "USB empty!!!")
 		status = {'tamper_ok':0, 'usb_ok':-1}
@@ -47,6 +48,7 @@ def TM_readData(data):
 
 def SC_readData(data):
 	global status
+	log = get_log()
 	if data == []:
 		status = {'scard_ok':0, 'usb_ok':-1}
 		return None
@@ -66,8 +68,6 @@ def SC_readData(data):
 	status = {'scard_ok':1, 'usb_ok':1}
 	return None
 
-
-
 def usb_hid_test(app, cmd):
 	global status
 	cvendor_id=0x0801
@@ -79,7 +79,7 @@ def usb_hid_test(app, cmd):
 	try:
 		dev = hid.HidDeviceFilter(vendor_id = 0x0801, product_id = 0x001B).get_devices()[0]
 	except:
-		log.info( "USB Failure to detect")
+		log.info(log_date(get_log()) + ' USB Failure to detect...')
 		status = {'scard_ok':0, 'usb_ok':-1}
 		return status
 		

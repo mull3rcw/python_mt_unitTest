@@ -13,28 +13,31 @@ import serial, time
 import binascii
 import struct
 from serial import SerialException
+from logging_fcc import log_date, get_log
 
 #convert string to hex
 def toHex2(text):
 	s=binascii.unhexlify(text)
-	#print s
+	#log.info( s )
 	return [hex(ord(x)) for x in s]	
 
 def ser_test(app, cmd):
 	#Compares need to be against strings, and lower case apparently
 	status = {'scard_ok':-1, 'ser_ok':-1}
 	#print 'Please enter IP address: '
+	log = get_log()
 	
-	port = "COM13"   #Windows com port format was 13
+	port = "COM1"   #Windows com port format was 13
 	baud = 9600		#make sure it's the same for both side
 
 	try:
 		ser = serial.Serial(port, baud, timeout=10) #Block for 10 second when read
 	except SerialException:
+		log.info(log_date(get_log()) + ' SerialException...')
 		return status
 
 	if not ser.isOpen():
-		print(ser.name + ' is NOT open...')
+		log.info(ser.name + ' is NOT open...')
 
 	buffer = bytearray.fromhex(u'C0 01 01 C1 01 01 C2 01 3F')
 	buffer[5] = app
@@ -58,12 +61,12 @@ def ser_test(app, cmd):
 		if data == []:
 			status = {'scard_ok':0, 'ser_ok':-1}
 		elif data[11] != '0x0':
-			print "SC SER FAILED!!! " + str(int(data[11], 16))
+			log.info( "SC SER FAILED!!! " + str(int(data[11], 16)))
 			#for i in range(12):
 			#	print data[i]
 			status = {'scard_ok':0, 'ser_ok':1}
 		else:
-			#print "SC SER PASSED!!!"
+			#log.info( "SC SER PASSED!!!")
 			status = {'scard_ok':1, 'ser_ok':1}
 	else:
 		#TAMPER
@@ -71,22 +74,22 @@ def ser_test(app, cmd):
 		if data == []:
 			status = {'tamper_ok':0, 'ser_ok':-1}
 		elif data[11] != '0x0':
-			print "SER FAILED!!!"
+			log.info( "SER FAILED!!!")
 			status = {'tamper_ok':0, 'ser_ok':0}
 		elif data[14] != '0x3f':
-			print "SER FAILED (tamper not ON)!" + data[14]
+			log.info( "SER FAILED (tamper not ON)!" + data[14])
 			status = {'tamper_ok':0, 'ser_ok':1}
 		elif data[15] != '0xf':
-			print "SER FAILED (tamper not ON)!!!" + data[15]
+			log.info( "SER FAILED (tamper not ON)!!!" + data[15])
 			status = {'tamper_ok':0, 'ser_ok':1}
 		elif data[16] != '0x0':
-			print "SER FAILED EXT!!!" + data[16]
+			log.info( "SER FAILED EXT!!!" + data[16])
 			status = {'tamper_ok':0, 'ser_ok':1}
 		elif data[17] != '0x0':
-			print "SER FAILED INT!!!" + data[17]
+			log.info( "SER FAILED INT!!!" + data[17])
 			status = {'tamper_ok':0, 'ser_ok':1}
 		else:
-			#print "TM SER PASSED!!!"
+			#log.info( "TM SER PASSED!!!")
 			status = {'tamper_ok':1, 'ser_ok':1}
 		
 	time.sleep(1)

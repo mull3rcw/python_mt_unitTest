@@ -24,7 +24,8 @@ myst = datetime.datetime.fromtimestamp(myts).strftime('%Y-%m-%d+%H_%M_%S')
 
 def log_date(n):
 	#t = datetime.datetime.fromtimestamp(myts).strftime('%Y-%m-%d+%H_%M_%S')
-	t = datetime.datetime.fromtimestamp(myts).strftime("%Y-%m-%d %H:%M:%S")
+	nt = time.time()
+	t = datetime.datetime.fromtimestamp(nt).strftime("%Y-%m-%d %H:%M:%S")
 	n.info(t)
 	return t
 
