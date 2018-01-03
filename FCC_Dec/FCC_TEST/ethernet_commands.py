@@ -57,7 +57,7 @@ def eth_test(app, cmd):
 			status = {'scard_ok':0, 'eth_ok':-1}
 		elif data[11] != 0:
 			log.info( "SC ETH FAILED!!! " + str(data[11]))
-			status = {'scard_ok':0, 'eth_ok':1}
+			status = {'scard_ok':0, 'eth_ok':-1}
 		else:
 			#log.info( "SC ETH PASSED!!!"
 			status = {'scard_ok':1, 'eth_ok':1}
@@ -66,19 +66,19 @@ def eth_test(app, cmd):
 		if data == []:
 			status = {'tamper_ok':0, 'eth_ok':-1}
 		elif data[11] != 0:
-			log.info( "USB FAILED!!!")
-			status = {'tamper_ok':0, 'eth_ok':0}
+			log.info( "ETH FAILED!!!")
+			status = {'tamper_ok':0, 'eth_ok':-1}
 		elif data[14] != 0x3F:
-			log.info( "USB FAILED (tamper not ON)!!!" + data[15])
+			log.info( "ETH FAILED (tamper not ON)!!!" + data[15])
 			status = {'tamper_ok':0, 'eth_ok':1}
 		elif data[15] != 0xF:
-			log.info( "USB FAILED (tamper not ON)!!!" + data[16])
+			log.info( "ETH FAILED (tamper not ON)!!!" + data[16])
 			status = {'tamper_ok':0, 'eth_ok':1}
 		elif data[16] != 0x0:
-			log.info( "USB FAILED EXT!!!" + data[17])
+			log.info( "ETH FAILED EXT!!!" + data[17])
 			status = {'tamper_ok':0, 'eth_ok':1}
 		elif data[17] != 0x0:
-			log.info( "USB FAILED INT!!!" + data[18])
+			log.info( "ETH FAILED INT!!!" + data[18])
 			status = {'tamper_ok':0, 'eth_ok':1}
 		else:
 			#log.info( "TM ETH PASSED!!!")

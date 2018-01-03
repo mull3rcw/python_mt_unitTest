@@ -75,7 +75,7 @@ def ser_test(app, cmd):
 			status = {'tamper_ok':0, 'ser_ok':-1}
 		elif data[11] != '0x0':
 			log.info( "SER FAILED!!!")
-			status = {'tamper_ok':0, 'ser_ok':0}
+			status = {'tamper_ok':0, 'ser_ok':-1}
 		elif data[14] != '0x3f':
 			log.info( "SER FAILED (tamper not ON)!" + data[14])
 			status = {'tamper_ok':0, 'ser_ok':1}
