@@ -5,7 +5,7 @@ from logging_fcc import set_log_info, log_date, get_log, get_mode
 from ethernet_commands import eth_test
 from usb_hid import usb_hid_test, set_ip
 #from serial_fcc import ser_Init, get_ser, log, set_log_info, uart_self_test
-from uart import ser_test
+from uart import ser_test, ser_find_com
 
 ###############  USER DEFINED START ###############
 #mode = "laptop"
@@ -159,6 +159,7 @@ if __name__=='__main__':
 	my_ip = read_ip_address()
 	set_ip(my_ip)
 	log.info("IP Address: " + my_ip)
+	log.info("Port: " + ser_find_com())
 	log.info("Configuration: " + get_mode())
 	
 	for arg in sys.argv[1:]:

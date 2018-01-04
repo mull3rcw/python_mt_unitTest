@@ -30,6 +30,7 @@ def eth_test(app, cmd):
 	dynaproPort = str(5000)
 	log = get_log()
 
+	time.sleep(1)
 	try:
 		client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		client_socket.settimeout(3.0)
