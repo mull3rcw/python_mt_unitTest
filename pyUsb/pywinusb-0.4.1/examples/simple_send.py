@@ -23,7 +23,7 @@ def click_signal(target_usage, target_vendor_id):
                 device.open()
                 # browse output reports, we could search over feature reports also,
                 # changing find_output_reports() to find_feature_reports()
-                for report in device.find_output_reports():
+                for report in device.find_output_reports()[0]:
                     if target_usage in report:
                         # found out target!
                         report[target_usage] = 1 # yes, changing values is that easy
@@ -40,7 +40,7 @@ def click_signal(target_usage, target_vendor_id):
         print("The target device was found, but the requested usage does not exist!\n")
     #
 if __name__ == '__main__':
-    target_vendor_id = 0x1234 # just an example, change it to the actual vendor_id
+    target_vendor_id = 0x0801 # just an example, change it to the actual vendor_id
     target_usage = hid.get_full_usage_id(0xffa0, 0x02) # generic vendor page, usage_id = 2
     # go for it!
     click_signal(target_usage, target_vendor_id)

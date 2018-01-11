@@ -21,6 +21,7 @@ def findHIDDevice(mbed_vendor_id, mbed_product_id):
     if not hid_device:
         print "No device connected"
     else:
+        print hid_device
         sys.stdout.write('mbed found\n')
         if hid_device.is_kernel_driver_active(0):
             try:
@@ -50,8 +51,8 @@ def findHIDDevice(mbed_vendor_id, mbed_product_id):
  
 if __name__ == '__main__':
     # The vendor ID and product ID used in the Mbed program
-    mbed_vendor_id = 0x1234 
-    mbed_product_id = 0x0006
+    mbed_vendor_id = 0x0801 
+    mbed_product_id = 0x001b
  
     # Search the Mbed, attach rx handler and send data
     findHIDDevice(mbed_vendor_id, mbed_product_id)

@@ -1,0 +1,837 @@
+No.     Time           Source                Destination           Protocol Length Info
+      1 0.000000       host                  1.8.0                 USB      36     GET DESCRIPTOR Request DEVICE
+ 
+Frame 1: 36 bytes on wire (288 bits), 36 bytes captured (288 bits)
+USB URB
+    [Source: host]
+    URB Function: URB_FUNCTION_GET_DESCRIPTOR_FROM_DEVICE (0x000b)
+    IRP information: 0x00, Direction: FDO -> PDO
+    Endpoint: 0x00, Direction: OUT
+    URB transfer type: URB_CONTROL (0x02)
+    bmRequestType: 0x80
+    bRequest: GET DESCRIPTOR (6)
+    Descriptor Index: 0x00
+    bDescriptorType: 0x01
+ 
+No.     Time           Source                Destination           Protocol Length Info
+      2 0.000000       1.8.0                 host                  USB      46     GET DESCRIPTOR Response DEVICE
+ 
+Frame 2: 46 bytes on wire (368 bits), 46 bytes captured (368 bits)
+USB URB
+    [Source: 1.8.0]
+    URB Function: URB_FUNCTION_CONTROL_TRANSFER (0x0008)
+    IRP information: 0x01, Direction: PDO -> FDO
+    Endpoint: 0x80, Direction: IN
+    URB transfer type: URB_CONTROL (0x02)
+    [Time from request: 0.000000000 seconds]
+DEVICE DESCRIPTOR
+ 
+No.     Time           Source                Destination           Protocol Length Info
+      3 0.000000       1.8.0                 host                  USB      28     GET DESCRIPTOR Status
+ 
+Frame 3: 28 bytes on wire (224 bits), 28 bytes captured (224 bits)
+USB URB
+    [Source: 1.8.0]
+    URB Function: URB_FUNCTION_CONTROL_TRANSFER (0x0008)
+    IRP information: 0x01, Direction: PDO -> FDO
+    Endpoint: 0x80, Direction: IN
+    URB transfer type: URB_CONTROL (0x02)
+    [Time from request: 0.000000000 seconds]
+ 
+No.     Time           Source                Destination           Protocol Length Info
+      4 0.000000       host                  1.8.0                 USB      36     GET DESCRIPTOR Request CONFIGURATION
+ 
+Frame 4: 36 bytes on wire (288 bits), 36 bytes captured (288 bits)
+USB URB
+    [Source: host]
+    URB Function: URB_FUNCTION_GET_DESCRIPTOR_FROM_DEVICE (0x000b)
+    IRP information: 0x00, Direction: FDO -> PDO
+    Endpoint: 0x00, Direction: OUT
+    URB transfer type: URB_CONTROL (0x02)
+    bmRequestType: 0x80
+    bRequest: GET DESCRIPTOR (6)
+    Descriptor Index: 0x00
+    bDescriptorType: 0x02
+ 
+No.     Time           Source                Destination           Protocol Length Info
+      5 0.000000       1.8.0                 host                  USB      37     GET DESCRIPTOR Response CONFIGURATION
+ 
+Frame 5: 37 bytes on wire (296 bits), 37 bytes captured (296 bits)
+USB URB
+    [Source: 1.8.0]
+    URB Function: URB_FUNCTION_CONTROL_TRANSFER (0x0008)
+    IRP information: 0x01, Direction: PDO -> FDO
+    Endpoint: 0x80, Direction: IN
+    URB transfer type: URB_CONTROL (0x02)
+    [Time from request: 0.000000000 seconds]
+CONFIGURATION DESCRIPTOR
+ 
+No.     Time           Source                Destination           Protocol Length Info
+      6 0.000000       1.8.0                 host                  USB      28     GET DESCRIPTOR Status
+ 
+Frame 6: 28 bytes on wire (224 bits), 28 bytes captured (224 bits)
+USB URB
+    [Source: 1.8.0]
+    URB Function: URB_FUNCTION_CONTROL_TRANSFER (0x0008)
+    IRP information: 0x01, Direction: PDO -> FDO
+    Endpoint: 0x80, Direction: IN
+    URB transfer type: URB_CONTROL (0x02)
+    [Time from request: 0.000000000 seconds]
+ 
+No.     Time           Source                Destination           Protocol Length Info
+      7 0.000000       host                  1.8.0                 USB      36     GET DESCRIPTOR Request CONFIGURATION
+ 
+Frame 7: 36 bytes on wire (288 bits), 36 bytes captured (288 bits)
+USB URB
+    [Source: host]
+    URB Function: URB_FUNCTION_GET_DESCRIPTOR_FROM_DEVICE (0x000b)
+    IRP information: 0x00, Direction: FDO -> PDO
+    Endpoint: 0x00, Direction: OUT
+    URB transfer type: URB_CONTROL (0x02)
+    bmRequestType: 0x80
+    bRequest: GET DESCRIPTOR (6)
+    Descriptor Index: 0x00
+    bDescriptorType: 0x02
+ 
+No.     Time           Source                Destination           Protocol Length Info
+      8 0.000000       1.8.0                 host                  USB      62     GET DESCRIPTOR Response CONFIGURATION
+ 
+Frame 8: 62 bytes on wire (496 bits), 62 bytes captured (496 bits)
+USB URB
+    [Source: 1.8.0]
+    URB Function: URB_FUNCTION_CONTROL_TRANSFER (0x0008)
+    IRP information: 0x01, Direction: PDO -> FDO
+    Endpoint: 0x80, Direction: IN
+    URB transfer type: URB_CONTROL (0x02)
+    [Time from request: 0.000000000 seconds]
+CONFIGURATION DESCRIPTOR
+INTERFACE DESCRIPTOR (0.0): class HID
+HID DESCRIPTOR
+ENDPOINT DESCRIPTOR
+ 
+No.     Time           Source                Destination           Protocol Length Info
+      9 0.000000       1.8.0                 host                  USB      28     GET DESCRIPTOR Status
+ 
+Frame 9: 28 bytes on wire (224 bits), 28 bytes captured (224 bits)
+USB URB
+    [Source: 1.8.0]
+    URB Function: URB_FUNCTION_CONTROL_TRANSFER (0x0008)
+    IRP information: 0x01, Direction: PDO -> FDO
+    Endpoint: 0x80, Direction: IN
+    URB transfer type: URB_CONTROL (0x02)
+    [Time from request: 0.000000000 seconds]
+ 
+No.     Time           Source                Destination           Protocol Length Info
+     10 0.000000       host                  1.8.0                 USB      36     SET CONFIGURATION Request
+ 
+Frame 10: 36 bytes on wire (288 bits), 36 bytes captured (288 bits)
+USB URB
+    [Source: host]
+    URB Function: URB_FUNCTION_SELECT_CONFIGURATION (0x0000)
+    IRP information: 0x00, Direction: FDO -> PDO
+    Endpoint: 0x80, Direction: IN
+    URB transfer type: URB_CONTROL (0x02)
+    bmRequestType: 0x00
+    bRequest: SET CONFIGURATION (9)
+    bConfigurationValue: 1
+    wIndex: 0 (0x0000)
+ 
+No.     Time           Source                Destination           Protocol Length Info
+     11 0.000000       1.8.0                 host                  USB      28     SET CONFIGURATION Status
+ 
+Frame 11: 28 bytes on wire (224 bits), 28 bytes captured (224 bits)
+USB URB
+    [Source: 1.8.0]
+    URB Function: URB_FUNCTION_SELECT_CONFIGURATION (0x0000)
+    IRP information: 0x01, Direction: PDO -> FDO
+    Endpoint: 0x80, Direction: IN
+    URB transfer type: URB_CONTROL (0x02)
+    [Time from request: 0.000000000 seconds]
+ 
+No.     Time           Source                Destination           Protocol Length Info
+     12 0.000000       host                  1.8.0                 USBHID   36     SET_IDLE Request
+ 
+Frame 12: 36 bytes on wire (288 bits), 36 bytes captured (288 bits)
+USB URB
+    [Source: host]
+    URB Function: URB_FUNCTION_CLASS_INTERFACE (0x001b)
+    IRP information: 0x00, Direction: FDO -> PDO
+    Endpoint: 0x00, Direction: OUT
+    URB transfer type: URB_CONTROL (0x02)
+    [bInterfaceClass: HID (0x03)]
+    bmRequestType: 0x21
+bRequest: SET_IDLE (0x0a)
+wValue: 0x0000
+wIndex: 0
+ 
+No.     Time           Source                Destination           Protocol Length Info
+     13 0.000000       1.8.0                 host                  USB      28     GET INTERFACE Status
+ 
+Frame 13: 28 bytes on wire (224 bits), 28 bytes captured (224 bits)
+USB URB
+    [Source: 1.8.0]
+    URB Function: URB_FUNCTION_CONTROL_TRANSFER (0x0008)
+    IRP information: 0x01, Direction: PDO -> FDO
+    Endpoint: 0x00, Direction: OUT
+    URB transfer type: URB_CONTROL (0x02)
+    [Time from request: 0.000000000 seconds]
+ 
+No.     Time           Source                Destination           Protocol Length Info
+     14 0.000000       host                  1.8.0                 USBHID   36     GET DESCRIPTOR Request HID Report
+ 
+Frame 14: 36 bytes on wire (288 bits), 36 bytes captured (288 bits)
+USB URB
+    [Source: host]
+    URB Function: URB_FUNCTION_GET_DESCRIPTOR_FROM_INTERFACE (0x0028)
+    IRP information: 0x00, Direction: FDO -> PDO
+    Endpoint: 0x00, Direction: OUT
+    URB transfer type: URB_CONTROL (0x02)
+    [bInterfaceClass: HID (0x03)]
+    bmRequestType: 0x81
+bDescriptorIndex: 0x00
+bDescriptorType: HID Report (0x22)
+wInterfaceNumber: 0
+wDescriptorLength: 619
+ 
+No.     Time           Source                Destination           Protocol Length Info
+     15 0.000000       1.8.0                 host                  USBHID   583    GET DESCRIPTOR Response HID Report
+ 
+Frame 15: 583 bytes on wire (4664 bits), 583 bytes captured (4664 bits)
+USB URB
+    [Source: 1.8.0]
+    URB Function: URB_FUNCTION_CONTROL_TRANSFER (0x0008)
+    IRP information: 0x01, Direction: PDO -> FDO
+    Endpoint: 0x80, Direction: IN
+    URB transfer type: URB_CONTROL (0x02)
+    [Time from request: 0.000000000 seconds]
+    [bInterfaceClass: HID (0x03)]
+HID Report
+ 
+No.     Time           Source                Destination           Protocol Length Info
+     16 0.000000       1.8.0                 host                  USB      28     GET DESCRIPTOR Status
+ 
+Frame 16: 28 bytes on wire (224 bits), 28 bytes captured (224 bits)
+USB URB
+    [Source: 1.8.0]
+    URB Function: URB_FUNCTION_CONTROL_TRANSFER (0x0008)
+    IRP information: 0x01, Direction: PDO -> FDO
+    Endpoint: 0x80, Direction: IN
+    URB transfer type: URB_CONTROL (0x02)
+    [Time from request: 0.000000000 seconds]
+ 
+No.     Time           Source                Destination           Protocol Length Info
+     17 0.960438       host                  1.9.0                 USB      36     GET DESCRIPTOR Request DEVICE
+ 
+Frame 17: 36 bytes on wire (288 bits), 36 bytes captured (288 bits)
+USB URB
+    [Source: host]
+    URB Function: URB_FUNCTION_GET_DESCRIPTOR_FROM_DEVICE (0x000b)
+    IRP information: 0x00, Direction: FDO -> PDO
+    Endpoint: 0x00, Direction: OUT
+    URB transfer type: URB_CONTROL (0x02)
+    bmRequestType: 0x80
+    bRequest: GET DESCRIPTOR (6)
+    Descriptor Index: 0x00
+    bDescriptorType: 0x01
+ 
+No.     Time           Source                Destination           Protocol Length Info
+     18 0.960438       1.9.0                 host                  USB      46     GET DESCRIPTOR Response DEVICE
+ 
+Frame 18: 46 bytes on wire (368 bits), 46 bytes captured (368 bits)
+USB URB
+    [Source: 1.9.0]
+    URB Function: URB_FUNCTION_CONTROL_TRANSFER (0x0008)
+    IRP information: 0x01, Direction: PDO -> FDO
+    Endpoint: 0x80, Direction: IN
+    URB transfer type: URB_CONTROL (0x02)
+    [Time from request: 0.000000000 seconds]
+DEVICE DESCRIPTOR
+ 
+No.     Time           Source                Destination           Protocol Length Info
+     19 0.960438       1.9.0                 host                  USB      28     GET DESCRIPTOR Status
+ 
+Frame 19: 28 bytes on wire (224 bits), 28 bytes captured (224 bits)
+USB URB
+    [Source: 1.9.0]
+    URB Function: URB_FUNCTION_CONTROL_TRANSFER (0x0008)
+    IRP information: 0x01, Direction: PDO -> FDO
+    Endpoint: 0x80, Direction: IN
+    URB transfer type: URB_CONTROL (0x02)
+    [Time from request: 0.000000000 seconds]
+ 
+No.     Time           Source                Destination           Protocol Length Info
+     20 0.960438       host                  1.9.0                 USB      36     GET DESCRIPTOR Request CONFIGURATION
+ 
+Frame 20: 36 bytes on wire (288 bits), 36 bytes captured (288 bits)
+USB URB
+    [Source: host]
+    URB Function: URB_FUNCTION_GET_DESCRIPTOR_FROM_DEVICE (0x000b)
+    IRP information: 0x00, Direction: FDO -> PDO
+    Endpoint: 0x00, Direction: OUT
+    URB transfer type: URB_CONTROL (0x02)
+    bmRequestType: 0x80
+    bRequest: GET DESCRIPTOR (6)
+    Descriptor Index: 0x00
+    bDescriptorType: 0x02
+ 
+No.     Time           Source                Destination           Protocol Length Info
+     21 0.960951       1.9.0                 host                  USB      37     GET DESCRIPTOR Response CONFIGURATION
+ 
+Frame 21: 37 bytes on wire (296 bits), 37 bytes captured (296 bits)
+USB URB
+    [Source: 1.9.0]
+    URB Function: URB_FUNCTION_CONTROL_TRANSFER (0x0008)
+    IRP information: 0x01, Direction: PDO -> FDO
+    Endpoint: 0x80, Direction: IN
+    URB transfer type: URB_CONTROL (0x02)
+    [Time from request: 0.000513000 seconds]
+CONFIGURATION DESCRIPTOR
+ 
+No.     Time           Source                Destination           Protocol Length Info
+     22 0.960951       1.9.0                 host                  USB      28     GET DESCRIPTOR Status
+ 
+Frame 22: 28 bytes on wire (224 bits), 28 bytes captured (224 bits)
+USB URB
+    [Source: 1.9.0]
+    URB Function: URB_FUNCTION_CONTROL_TRANSFER (0x0008)
+    IRP information: 0x01, Direction: PDO -> FDO
+    Endpoint: 0x80, Direction: IN
+    URB transfer type: URB_CONTROL (0x02)
+   [Time from request: 0.000513000 seconds]
+ 
+No.     Time           Source                Destination           Protocol Length Info
+     23 0.960951       host                  1.9.0                 USB      36     GET DESCRIPTOR Request CONFIGURATION
+ 
+Frame 23: 36 bytes on wire (288 bits), 36 bytes captured (288 bits)
+USB URB
+    [Source: host]
+    URB Function: URB_FUNCTION_GET_DESCRIPTOR_FROM_DEVICE (0x000b)
+    IRP information: 0x00, Direction: FDO -> PDO
+    Endpoint: 0x00, Direction: OUT
+    URB transfer type: URB_CONTROL (0x02)
+    bmRequestType: 0x80
+    bRequest: GET DESCRIPTOR (6)
+    Descriptor Index: 0x00
+    bDescriptorType: 0x02
+ 
+No.     Time           Source                Destination           Protocol Length Info
+     24 0.960951       1.9.0                 host                  USB      62     GET DESCRIPTOR Response CONFIGURATION
+ 
+Frame 24: 62 bytes on wire (496 bits), 62 bytes captured (496 bits)
+USB URB
+    [Source: 1.9.0]
+    URB Function: URB_FUNCTION_CONTROL_TRANSFER (0x0008)
+    IRP information: 0x01, Direction: PDO -> FDO
+    Endpoint: 0x80, Direction: IN
+    URB transfer type: URB_CONTROL (0x02)
+    [Time from request: 0.000000000 seconds]
+CONFIGURATION DESCRIPTOR
+INTERFACE DESCRIPTOR (0.0): class HID
+HID DESCRIPTOR
+ENDPOINT DESCRIPTOR
+ 
+No.     Time           Source                Destination           Protocol Length Info
+     25 0.960951       1.9.0                 host                  USB      28     GET DESCRIPTOR Status
+ 
+Frame 25: 28 bytes on wire (224 bits), 28 bytes captured (224 bits)
+USB URB
+    [Source: 1.9.0]
+    URB Function: URB_FUNCTION_CONTROL_TRANSFER (0x0008)
+    IRP information: 0x01, Direction: PDO -> FDO
+    Endpoint: 0x80, Direction: IN
+    URB transfer type: URB_CONTROL (0x02)
+    [Time from request: 0.000000000 seconds]
+ 
+No.     Time           Source                Destination           Protocol Length Info
+     26 0.960951       host                  1.9.0                 USB      36     SET CONFIGURATION Request
+ 
+Frame 26: 36 bytes on wire (288 bits), 36 bytes captured (288 bits)
+USB URB
+    [Source: host]
+    URB Function: URB_FUNCTION_SELECT_CONFIGURATION (0x0000)
+    IRP information: 0x00, Direction: FDO -> PDO
+    Endpoint: 0x80, Direction: IN
+    URB transfer type: URB_CONTROL (0x02)
+    bmRequestType: 0x00
+    bRequest: SET CONFIGURATION (9)
+    bConfigurationValue: 1
+    wIndex: 0 (0x0000)
+ 
+No.     Time           Source                Destination           Protocol Length Info
+     27 0.961441       1.9.0                 host                  USB      28     SET CONFIGURATION Status
+ 
+Frame 27: 28 bytes on wire (224 bits), 28 bytes captured (224 bits)
+USB URB
+    [Source: 1.9.0]
+    URB Function: URB_FUNCTION_SELECT_CONFIGURATION (0x0000)
+    IRP information: 0x01, Direction: PDO -> FDO
+    Endpoint: 0x80, Direction: IN
+    URB transfer type: URB_CONTROL (0x02)
+    [Time from request: 0.000490000 seconds]
+ 
+No.     Time           Source                Destination           Protocol Length Info
+     28 0.961441       host                  1.9.0                 USBHID   36     SET_IDLE Request
+ 
+Frame 28: 36 bytes on wire (288 bits), 36 bytes captured (288 bits)
+USB URB
+    [Source: host]
+    URB Function: URB_FUNCTION_CLASS_INTERFACE (0x001b)
+    IRP information: 0x00, Direction: FDO -> PDO
+    Endpoint: 0x00, Direction: OUT
+    URB transfer type: URB_CONTROL (0x02)
+    [bInterfaceClass: HID (0x03)]
+    bmRequestType: 0x21
+bRequest: SET_IDLE (0x0a)
+wValue: 0x0000
+wIndex: 0
+ 
+No.     Time           Source                Destination           Protocol Length Info
+     29 0.961441       1.9.0                 host                  USB      28     GET INTERFACE Status
+ 
+Frame 29: 28 bytes on wire (224 bits), 28 bytes captured (224 bits)
+USB URB
+    [Source: 1.9.0]
+    URB Function: URB_FUNCTION_CONTROL_TRANSFER (0x0008)
+    IRP information: 0x01, Direction: PDO -> FDO
+    Endpoint: 0x00, Direction: OUT
+    URB transfer type: URB_CONTROL (0x02)
+   [Time from request: 0.000000000 seconds]
+ 
+No.     Time           Source                Destination           Protocol Length Info
+     30 0.961441       host                  1.9.0                 USBHID   36     GET DESCRIPTOR Request HID Report
+ 
+Frame 30: 36 bytes on wire (288 bits), 36 bytes captured (288 bits)
+USB URB
+    [Source: host]
+    URB Function: URB_FUNCTION_GET_DESCRIPTOR_FROM_INTERFACE (0x0028)
+    IRP information: 0x00, Direction: FDO -> PDO
+    Endpoint: 0x00, Direction: OUT
+    URB transfer type: URB_CONTROL (0x02)
+    [bInterfaceClass: HID (0x03)]
+    bmRequestType: 0x81
+bDescriptorIndex: 0x00
+bDescriptorType: HID Report (0x22)
+wInterfaceNumber: 0
+wDescriptorLength: 619
+ 
+No.     Time           Source                Destination           Protocol Length Info
+     31 0.962493       1.9.0                 host                  USBHID   583    GET DESCRIPTOR Response HID Report
+ 
+Frame 31: 583 bytes on wire (4664 bits), 583 bytes captured (4664 bits)
+USB URB
+    [Source: 1.9.0]
+    URB Function: URB_FUNCTION_CONTROL_TRANSFER (0x0008)
+    IRP information: 0x01, Direction: PDO -> FDO
+    Endpoint: 0x80, Direction: IN
+    URB transfer type: URB_CONTROL (0x02)
+    [Time from request: 0.001052000 seconds]
+    [bInterfaceClass: HID (0x03)]
+HID Report
+ 
+No.     Time           Source                Destination           Protocol Length Info
+     32 0.962493       1.9.0                 host                  USB      28     GET DESCRIPTOR Status
+ 
+Frame 32: 28 bytes on wire (224 bits), 28 bytes captured (224 bits)
+USB URB
+    [Source: 1.9.0]
+    URB Function: URB_FUNCTION_CONTROL_TRANSFER (0x0008)
+    IRP information: 0x01, Direction: PDO -> FDO
+    Endpoint: 0x80, Direction: IN
+    URB transfer type: URB_CONTROL (0x02)
+    [Time from request: 0.001052000 seconds]
+ 
+No.     Time           Source                Destination           Protocol Length Info
+     33 5.818544       1.3.1                 host                  USB      143    URB_INTERRUPT in
+ 
+Frame 33: 143 bytes on wire (1144 bits), 143 bytes captured (1144 bits)
+USB URB
+    [Source: 1.3.1]
+    URB Function: URB_FUNCTION_BULK_OR_INTERRUPT_TRANSFER (0x0009)
+    IRP information: 0x01, Direction: PDO -> FDO
+    Endpoint: 0x81, Direction: IN
+    URB transfer type: URB_INTERRUPT (0x01)
+    [bInterfaceClass: Unknown (0xffff)]
+Leftover Capture Data: 01110403480748070c070c07000000000000000000000000...
+ 
+No.     Time           Source                Destination           Protocol Length Info
+     34 5.834115       1.3.1                 host                  USB      143    URB_INTERRUPT in
+ 
+Frame 34: 143 bytes on wire (1144 bits), 143 bytes captured (1144 bits)
+USB URB
+    [Source: 1.3.1]
+    URB Function: URB_FUNCTION_BULK_OR_INTERRUPT_TRANSFER (0x0009)
+    IRP information: 0x01, Direction: PDO -> FDO
+    Endpoint: 0x81, Direction: IN
+    URB transfer type: URB_INTERRUPT (0x01)
+    [bInterfaceClass: Unknown (0xffff)]
+Leftover Capture Data: 01110403480748070c070c07000000000000000000000000...
+ 
+No.     Time           Source                Destination           Protocol Length Info
+     35 5.834115       1.3.1                 host                  USB      143    URB_INTERRUPT in
+ 
+Frame 35: 143 bytes on wire (1144 bits), 143 bytes captured (1144 bits)
+USB URB
+    [Source: 1.3.1]
+    URB Function: URB_FUNCTION_BULK_OR_INTERRUPT_TRANSFER (0x0009)
+    IRP information: 0x01, Direction: PDO -> FDO
+    Endpoint: 0x81, Direction: IN
+    URB transfer type: URB_INTERRUPT (0x01)
+    [bInterfaceClass: Unknown (0xffff)]
+Leftover Capture Data: 01110403480748070c070c07000000000000000000000000...
+ 
+No.     Time           Source                Destination           Protocol Length Info
+     36 5.849782       1.3.1                 host                  USB      143    URB_INTERRUPT in
+ 
+Frame 36: 143 bytes on wire (1144 bits), 143 bytes captured (1144 bits)
+USB URB
+    [Source: 1.3.1]
+    URB Function: URB_FUNCTION_BULK_OR_INTERRUPT_TRANSFER (0x0009)
+    IRP information: 0x01, Direction: PDO -> FDO
+    Endpoint: 0x81, Direction: IN
+    URB transfer type: URB_INTERRUPT (0x01)
+    [bInterfaceClass: Unknown (0xffff)]
+Leftover Capture Data: 01110404480748070c070c07000000000000000000000000...
+ 
+No.     Time           Source                Destination           Protocol Length Info
+     37 5.865417       1.3.1                 host                  USB      143    URB_INTERRUPT in
+ 
+Frame 37: 143 bytes on wire (1144 bits), 143 bytes captured (1144 bits)
+USB URB
+    [Source: 1.3.1]
+    URB Function: URB_FUNCTION_BULK_OR_INTERRUPT_TRANSFER (0x0009)
+    IRP information: 0x01, Direction: PDO -> FDO
+    Endpoint: 0x81, Direction: IN
+    URB transfer type: URB_INTERRUPT (0x01)
+    [bInterfaceClass: Unknown (0xffff)]
+Leftover Capture Data: 01110405480748070c070c07000000000000000000000000...
+ 
+No.     Time           Source                Destination           Protocol Length Info
+     38 5.865417       1.3.1                 host                  USB      143    URB_INTERRUPT in
+ 
+Frame 38: 143 bytes on wire (1144 bits), 143 bytes captured (1144 bits)
+USB URB
+    [Source: 1.3.1]
+    URB Function: URB_FUNCTION_BULK_OR_INTERRUPT_TRANSFER (0x0009)
+    IRP information: 0x01, Direction: PDO -> FDO
+    Endpoint: 0x81, Direction: IN
+    URB transfer type: URB_INTERRUPT (0x01)
+    [bInterfaceClass: Unknown (0xffff)]
+Leftover Capture Data: 01110405480748070c070c07000000000000000000000000...
+ 
+No.     Time           Source                Destination           Protocol Length Info
+     39 5.880937       1.3.1                 host                  USB      143    URB_INTERRUPT in
+ 
+Frame 39: 143 bytes on wire (1144 bits), 143 bytes captured (1144 bits)
+USB URB
+    [Source: 1.3.1]
+    URB Function: URB_FUNCTION_BULK_OR_INTERRUPT_TRANSFER (0x0009)
+    IRP information: 0x01, Direction: PDO -> FDO
+    Endpoint: 0x81, Direction: IN
+    URB transfer type: URB_INTERRUPT (0x01)
+    [bInterfaceClass: Unknown (0xffff)]
+Leftover Capture Data: 01110405480748070c070c07000000000000000000000000...
+ 
+No.     Time           Source                Destination           Protocol Length Info
+     40 5.880937       1.3.1                 host                  USB      143    URB_INTERRUPT in
+ 
+Frame 40: 143 bytes on wire (1144 bits), 143 bytes captured (1144 bits)
+USB URB
+    [Source: 1.3.1]
+    URB Function: URB_FUNCTION_BULK_OR_INTERRUPT_TRANSFER (0x0009)
+    IRP information: 0x01, Direction: PDO -> FDO
+    Endpoint: 0x81, Direction: IN
+    URB transfer type: URB_INTERRUPT (0x01)
+    [bInterfaceClass: Unknown (0xffff)]
+Leftover Capture Data: 01110303480748070c070c07000000000000000000000000...
+ 
+No.     Time           Source                Destination           Protocol Length Info
+     41 5.896513       1.3.1                 host                  USB      143    URB_INTERRUPT in
+ 
+Frame 41: 143 bytes on wire (1144 bits), 143 bytes captured (1144 bits)
+USB URB
+    [Source: 1.3.1]
+    URB Function: URB_FUNCTION_BULK_OR_INTERRUPT_TRANSFER (0x0009)
+    IRP information: 0x01, Direction: PDO -> FDO
+    Endpoint: 0x81, Direction: IN
+    URB transfer type: URB_INTERRUPT (0x01)
+    [bInterfaceClass: Unknown (0xffff)]
+Leftover Capture Data: 01100000480748070c070c07000000000000000000000000...
+ 
+No.     Time           Source                Destination           Protocol Length Info
+     42 7.086489       1.9.1                 host                  USB      34     URB_INTERRUPT in
+ 
+Frame 42: 34 bytes on wire (272 bits), 34 bytes captured (272 bits)
+USB URB
+    [Source: 1.9.1]
+    URB Function: URB_FUNCTION_BULK_OR_INTERRUPT_TRANSFER (0x0009)
+    IRP information: 0x01, Direction: PDO -> FDO
+    Endpoint: 0x81, Direction: IN
+    URB transfer type: URB_INTERRUPT (0x01)
+    [bInterfaceClass: HID (0x03)]
+Leftover Capture Data: 200080401f3f02
+ 
+No.     Time           Source                Destination           Protocol Length Info
+     43 12.247998      1.9.1                 host                  USB      34     URB_INTERRUPT in
+ 
+Frame 43: 34 bytes on wire (272 bits), 34 bytes captured (272 bits)
+USB URB
+    [Source: 1.9.1]
+    URB Function: URB_FUNCTION_BULK_OR_INTERRUPT_TRANSFER (0x0009)
+    IRP information: 0x01, Direction: PDO -> FDO
+    Endpoint: 0x81, Direction: IN
+    URB transfer type: URB_INTERRUPT (0x01)
+    [bInterfaceClass: HID (0x03)]
+Leftover Capture Data: 200080401f3f02
+ 
+No.     Time           Source                Destination           Protocol Length Info
+     44 16.139028      host                  1.9.0                 USB      36     GET DESCRIPTOR Request STRING
+ 
+Frame 44: 36 bytes on wire (288 bits), 36 bytes captured (288 bits)
+USB URB
+    [Source: host]
+    URB Function: URB_FUNCTION_GET_DESCRIPTOR_FROM_DEVICE (0x000b)
+    IRP information: 0x00, Direction: FDO -> PDO
+    Endpoint: 0x00, Direction: OUT
+    URB transfer type: URB_CONTROL (0x02)
+    bmRequestType: 0x80
+    bRequest: GET DESCRIPTOR (6)
+    Descriptor Index: 0x03
+    bDescriptorType: 0x03
+ 
+No.     Time           Source                Destination           Protocol Length Info
+     45 16.139028      1.9.0                 host                  USB      62     GET DESCRIPTOR Response STRING
+ 
+Frame 45: 62 bytes on wire (496 bits), 62 bytes captured (496 bits)
+USB URB
+    [Source: 1.9.0]
+    URB Function: URB_FUNCTION_CONTROL_TRANSFER (0x0008)
+    IRP information: 0x01, Direction: PDO -> FDO
+    Endpoint: 0x80, Direction: IN
+    URB transfer type: URB_CONTROL (0x02)
+    [Time from request: 0.000000000 seconds]
+STRING DESCRIPTOR
+ 
+No.     Time           Source                Destination           Protocol Length Info
+     46 16.139028      1.9.0                 host                  USB      28     GET DESCRIPTOR Status
+ 
+Frame 46: 28 bytes on wire (224 bits), 28 bytes captured (224 bits)
+USB URB
+    [Source: 1.9.0]
+    URB Function: URB_FUNCTION_CONTROL_TRANSFER (0x0008)
+    IRP information: 0x01, Direction: PDO -> FDO
+    Endpoint: 0x80, Direction: IN
+    URB transfer type: URB_CONTROL (0x02)
+    [Time from request: 0.000000000 seconds]
+ 
+No.     Time           Source                Destination           Protocol Length Info
+     47 16.139028      host                  1.9.0                 USB      36     GET DESCRIPTOR Request STRING
+ 
+Frame 47: 36 bytes on wire (288 bits), 36 bytes captured (288 bits)
+USB URB
+    [Source: host]
+    URB Function: URB_FUNCTION_GET_DESCRIPTOR_FROM_DEVICE (0x000b)
+    IRP information: 0x00, Direction: FDO -> PDO
+    Endpoint: 0x00, Direction: OUT
+    URB transfer type: URB_CONTROL (0x02)
+    bmRequestType: 0x80
+    bRequest: GET DESCRIPTOR (6)
+    Descriptor Index: 0x01
+    bDescriptorType: 0x03
+ 
+No.     Time           Source                Destination           Protocol Length Info
+     48 16.139028      1.9.0                 host                  USB      54     GET DESCRIPTOR Response STRING
+ 
+Frame 48: 54 bytes on wire (432 bits), 54 bytes captured (432 bits)
+USB URB
+    [Source: 1.9.0]
+    URB Function: URB_FUNCTION_CONTROL_TRANSFER (0x0008)
+    IRP information: 0x01, Direction: PDO -> FDO
+    Endpoint: 0x80, Direction: IN
+    URB transfer type: URB_CONTROL (0x02)
+    [Time from request: 0.000000000 seconds]
+STRING DESCRIPTOR
+ 
+No.     Time           Source                Destination           Protocol Length Info
+     49 16.139028      1.9.0                 host                  USB      28     GET DESCRIPTOR Status
+ 
+Frame 49: 28 bytes on wire (224 bits), 28 bytes captured (224 bits)
+USB URB
+    [Source: 1.9.0]
+    URB Function: URB_FUNCTION_CONTROL_TRANSFER (0x0008)
+    IRP information: 0x01, Direction: PDO -> FDO
+    Endpoint: 0x80, Direction: IN
+    URB transfer type: URB_CONTROL (0x02)
+    [Time from request: 0.000000000 seconds]
+ 
+No.     Time           Source                Destination           Protocol Length Info
+     50 16.139028      host                  1.9.0                 USB      36     GET DESCRIPTOR Request STRING
+ 
+Frame 50: 36 bytes on wire (288 bits), 36 bytes captured (288 bits)
+USB URB
+    [Source: host]
+    URB Function: URB_FUNCTION_GET_DESCRIPTOR_FROM_DEVICE (0x000b)
+    IRP information: 0x00, Direction: FDO -> PDO
+    Endpoint: 0x00, Direction: OUT
+    URB transfer type: URB_CONTROL (0x02)
+    bmRequestType: 0x80
+    bRequest: GET DESCRIPTOR (6)
+    Descriptor Index: 0x02
+    bDescriptorType: 0x03
+ 
+No.     Time           Source                Destination           Protocol Length Info
+     51 16.139028      1.9.0                 host                  USB      50     GET DESCRIPTOR Response STRING
+ 
+Frame 51: 50 bytes on wire (400 bits), 50 bytes captured (400 bits)
+USB URB
+    [Source: 1.9.0]
+    URB Function: URB_FUNCTION_CONTROL_TRANSFER (0x0008)
+    IRP information: 0x01, Direction: PDO -> FDO
+    Endpoint: 0x80, Direction: IN
+    URB transfer type: URB_CONTROL (0x02)
+    [Time from request: 0.000000000 seconds]
+STRING DESCRIPTOR
+ 
+No.     Time           Source                Destination           Protocol Length Info
+     52 16.139028      1.9.0                 host                  USB      28     GET DESCRIPTOR Status
+ 
+Frame 52: 28 bytes on wire (224 bits), 28 bytes captured (224 bits)
+USB URB
+    [Source: 1.9.0]
+    URB Function: URB_FUNCTION_CONTROL_TRANSFER (0x0008)
+    IRP information: 0x01, Direction: PDO -> FDO
+    Endpoint: 0x80, Direction: IN
+    URB transfer type: URB_CONTROL (0x02)
+    [Time from request: 0.000000000 seconds]
+ 
+No.     Time           Source                Destination           Protocol Length Info
+     53 16.139028      host                  1.9.0                 USB      36     GET DESCRIPTOR Request STRING
+ 
+Frame 53: 36 bytes on wire (288 bits), 36 bytes captured (288 bits)
+USB URB
+    [Source: host]
+    URB Function: URB_FUNCTION_GET_DESCRIPTOR_FROM_DEVICE (0x000b)
+    IRP information: 0x00, Direction: FDO -> PDO
+    Endpoint: 0x00, Direction: OUT
+    URB transfer type: URB_CONTROL (0x02)
+    bmRequestType: 0x80
+    bRequest: GET DESCRIPTOR (6)
+    Descriptor Index: 0x01
+    bDescriptorType: 0x03
+ 
+No.     Time           Source                Destination           Protocol Length Info
+     54 16.139028      1.9.0                 host                  USB      54     GET DESCRIPTOR Response STRING
+ 
+Frame 54: 54 bytes on wire (432 bits), 54 bytes captured (432 bits)
+USB URB
+    [Source: 1.9.0]
+    URB Function: URB_FUNCTION_CONTROL_TRANSFER (0x0008)
+    IRP information: 0x01, Direction: PDO -> FDO
+    Endpoint: 0x80, Direction: IN
+    URB transfer type: URB_CONTROL (0x02)
+    [Time from request: 0.000000000 seconds]
+STRING DESCRIPTOR
+ 
+No.     Time           Source                Destination           Protocol Length Info
+     55 16.139028      1.9.0                 host                  USB      28     GET DESCRIPTOR Status
+ 
+Frame 55: 28 bytes on wire (224 bits), 28 bytes captured (224 bits)
+USB URB
+    [Source: 1.9.0]
+    URB Function: URB_FUNCTION_CONTROL_TRANSFER (0x0008)
+    IRP information: 0x01, Direction: PDO -> FDO
+    Endpoint: 0x80, Direction: IN
+    URB transfer type: URB_CONTROL (0x02)
+    [Time from request: 0.000000000 seconds]
+ 
+No.     Time           Source                Destination           Protocol Length Info
+     56 16.139028      host                  1.9.0                 USB      36     GET DESCRIPTOR Request STRING
+ 
+Frame 56: 36 bytes on wire (288 bits), 36 bytes captured (288 bits)
+USB URB
+    [Source: host]
+    URB Function: URB_FUNCTION_GET_DESCRIPTOR_FROM_DEVICE (0x000b)
+    IRP information: 0x00, Direction: FDO -> PDO
+    Endpoint: 0x00, Direction: OUT
+    URB transfer type: URB_CONTROL (0x02)
+    bmRequestType: 0x80
+    bRequest: GET DESCRIPTOR (6)
+    Descriptor Index: 0x02
+    bDescriptorType: 0x03
+ 
+No.     Time           Source                Destination           Protocol Length Info
+     57 16.139028      1.9.0                 host                  USB      50     GET DESCRIPTOR Response STRING
+ 
+Frame 57: 50 bytes on wire (400 bits), 50 bytes captured (400 bits)
+USB URB
+    [Source: 1.9.0]
+    URB Function: URB_FUNCTION_CONTROL_TRANSFER (0x0008)
+    IRP information: 0x01, Direction: PDO -> FDO
+    Endpoint: 0x80, Direction: IN
+    URB transfer type: URB_CONTROL (0x02)
+    [Time from request: 0.000000000 seconds]
+STRING DESCRIPTOR
+ 
+No.     Time           Source                Destination           Protocol Length Info
+     58 16.139028      1.9.0                 host                  USB      28     GET DESCRIPTOR Status
+ 
+Frame 58: 28 bytes on wire (224 bits), 28 bytes captured (224 bits)
+USB URB
+    [Source: 1.9.0]
+    URB Function: URB_FUNCTION_CONTROL_TRANSFER (0x0008)
+    IRP information: 0x01, Direction: PDO -> FDO
+    Endpoint: 0x80, Direction: IN
+    URB transfer type: URB_CONTROL (0x02)
+    [Time from request: 0.000000000 seconds]
+ 
+No.     Time           Source                Destination           Protocol Length Info
+     59 16.139028      host                  1.9.0                 USB      36     GET DESCRIPTOR Request STRING
+ 
+Frame 59: 36 bytes on wire (288 bits), 36 bytes captured (288 bits)
+USB URB
+    [Source: host]
+    URB Function: URB_FUNCTION_GET_DESCRIPTOR_FROM_DEVICE (0x000b)
+    IRP information: 0x00, Direction: FDO -> PDO
+    Endpoint: 0x00, Direction: OUT
+    URB transfer type: URB_CONTROL (0x02)
+    bmRequestType: 0x80
+    bRequest: GET DESCRIPTOR (6)
+    Descriptor Index: 0x03
+    bDescriptorType: 0x03
+ 
+No.     Time           Source                Destination           Protocol Length Info
+     60 16.139028      1.9.0                 host                  USB      62     GET DESCRIPTOR Response STRING
+ 
+Frame 60: 62 bytes on wire (496 bits), 62 bytes captured (496 bits)
+USB URB
+    [Source: 1.9.0]
+    URB Function: URB_FUNCTION_CONTROL_TRANSFER (0x0008)
+    IRP information: 0x01, Direction: PDO -> FDO
+    Endpoint: 0x80, Direction: IN
+    URB transfer type: URB_CONTROL (0x02)
+    [Time from request: 0.000000000 seconds]
+STRING DESCRIPTOR
+ 
+No.     Time           Source                Destination           Protocol Length Info
+     61 16.139028      1.9.0                 host                  USB      28     GET DESCRIPTOR Status
+ 
+Frame 61: 28 bytes on wire (224 bits), 28 bytes captured (224 bits)
+USB URB
+    [Source: 1.9.0]
+    URB Function: URB_FUNCTION_CONTROL_TRANSFER (0x0008)
+    IRP information: 0x01, Direction: PDO -> FDO
+    Endpoint: 0x80, Direction: IN
+    URB transfer type: URB_CONTROL (0x02)
+    [Time from request: 0.000000000 seconds]
+ 
+No.     Time           Source                Destination           Protocol Length Info
+     62 17.373681      1.9.1                 host                  USB      34     URB_INTERRUPT in
+ 
+Frame 62: 34 bytes on wire (272 bits), 34 bytes captured (272 bits)
+USB URB
+    [Source: 1.9.1]
+    URB Function: URB_FUNCTION_BULK_OR_INTERRUPT_TRANSFER (0x0009)
+    IRP information: 0x01, Direction: PDO -> FDO
+    Endpoint: 0x81, Direction: IN
+    URB transfer type: URB_INTERRUPT (0x01)
+    [bInterfaceClass: HID (0x03)]
+Leftover Capture Data: 200080401f3f02

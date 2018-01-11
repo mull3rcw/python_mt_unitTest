@@ -2,7 +2,7 @@ import usb.core
 import usb.util
 
 # find our device
-dev = usb.core.find(idVendor=0x0801, idProduct=0x3003)
+dev = usb.core.find(idVendor=0x0801, idProduct=0x3004)
 
 # was it found?
 if dev is None:
@@ -42,12 +42,24 @@ assert ep_i is not None
 
 
 # write the data
-output = '124365'
-ep_o.write(output)
-print "write " + output
+#output = 1,2,4,3,6,5
+scout = 'C0 01 01 C1 01 06 C2 01 01'
+#sendCommand = bytearray.fromhex(u'C0 01 01 C1 01 06 C2 01 01') #simple SC command
+sendCommand = bytearray.fromhex(scout) #simple SC command
+output = '987643'
+#ep_o.write(output)
+ep_o.write(sendCommand)
+print "write " 
+#print output
+print scout
+
 rd =  ep_i.read(0x81)
 print "read"
+#print rd
 #print str(rd)
-conv = (chr(w) for w in rd)
-print ', '.join(map(str, conv))
+#conv = (str(w) for w in rd)
+for w in rd:
+	print hex(w)
+#print ', '.join(map(hex, conv))
+#print ', '.join(conv)
 print "done"
